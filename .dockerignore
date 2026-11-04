@@ -6,8 +6,11 @@ node_modules
 *.log
 npm-debug.log*
 dist
-.DS_Store
+build
 coverage
+.DS_Store
 .idea
 .vscode
+*.pem
+*.key
 

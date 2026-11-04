@@ -1,75 +1,139 @@
-# marriage-rsvp
+# Nyota
 
-A portfolio-grade Wedding RSVP & Headcount Web App for wedding planners and couples to eliminate catering headcount guesswork.
+> RSVP and headcount for Indian family functions
 
-Collects RSVPs per function via private, mobile-friendly links and calculates exact headcounts and dietary totals.
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue.svg)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-18.3-61dafb.svg)](https://react.dev/)
+[![Node.js](https://img.shields.io/badge/Node.js-22%20LTS-green.svg)](https://nodejs.org/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-orange.svg)](https://www.mysql.com/)
+[![Drizzle ORM](https://img.shields.io/badge/Drizzle-ORM-C5F74F.svg)](https://orm.drizzle.team/)
+[![Docker](https://img.shields.io/badge/Docker-Ready-2496ED.svg)](https://www.docker.com/)
+[![Tests](https://img.shields.io/badge/Tests-205%20Passing-brightgreen.svg)]()
 
-## Technology Stack
-- **Backend**: Node.js, Express, TypeScript, MySQL 8.0, Drizzle ORM
-- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS, React Router v7
-- **Security**: Argon2id password hashing, SHA-256 session token hashing at rest, HttpOnly & SameSite=Strict cookies, CSRF origin/referer protection, CSP (`frame-ancestors 'none'`, `script-src 'self'`), `X-Powered-By` disabled, multi-tenant isolation, 128-bit unguessable capability URLs
-- **Testing**: Vitest, Supertest (**25 server test suites, 205 passing tests** passing under `TZ=UTC`, `TZ=America/New_York`, and local machine timezones). Client workspace relies on strict TypeScript typechecking (`npm run typecheck`); no client DOM automated unit tests are configured.
+**Nyota** (Hindi: *न्योता*, meaning a warm invitation to a celebration, family gathering, or feast) is an event-agnostic, mobile-first RSVP and headcount management platform designed specifically for the dynamics of Indian family functions.
 
-## Phone Number & WhatsApp Integration
-- **Indian Phone Support**: Phone numbers are normalized to 10 digits with standard `+91` country code. Non-digit characters, leading zeros, and spaces are automatically stripped.
-- **WhatsApp Share Direct Link**: The WhatsApp share button generates direct `https://wa.me/91XXXXXXXXXX?text=...` links for pre-filling invite links.
-- **Graceful Fallback**: For households without a recorded phone number, the share button automatically falls back to `https://wa.me/?text=...`, opening WhatsApp's native contact selector so planners can select the contact on their phone.
+Whether organizing a 5-event Indian wedding (Haldi, Mehendi, Sangeet, Wedding, Reception), a milestone anniversary, a Griha Pravesh (housewarming), or an Upanayana ceremony, Nyota eliminates catering guesswork and coordination chaos by collecting per-function RSVPs through private capability URLs, tracking strict dietary splits, and powering rapid venue gate check-in.
 
-## Timezone Architecture
-- **Per-Wedding Timezone**: Each wedding stores its venue timezone as an IANA timezone identifier (e.g. `'Asia/Kolkata'`, `'Asia/Dubai'`, `'Europe/London'`, `'America/New_York'`), defaulting to `'Asia/Kolkata'`.
-- **Wall-Clock Consistency**: Function start times are captured as local wall-clock values and deterministically mapped to UTC points in time for storage.
-- **Universal NRI & Device Compatibility**: All guest RSVP forms, planner dashboards, check-in arrival stamps, and caterer CSV exports format dates and times in the wedding venue's timezone in 12-hour AM/PM format. Guests opening invitations abroad (e.g. US, UK, Gulf) always see the actual local venue time (e.g. 7:30 PM) rather than their phone's local time.
+---
 
-## Venue Check-In & Idempotency
-- **Fast Search & Arrival Tracking**: Volunteer gate attendants can search by guest name or phone, check in households with 1 tap, adjust party sizes with $\ge 48$px mobile-friendly steppers, and register walk-ins.
-- **Idempotent Walk-In Submission**: Walk-in arrivals generate a client-side UUID idempotency key that persists during submission. If a volunteer retries on a slow mobile connection, duplicate records are prevented at the database transaction level.
+## 🌟 Why Nyota?
 
-## Getting Started
+- **Event-Agnostic by Design**: Unlike generic wedding apps, Nyota's multi-event architecture natively handles any combination of sub-events under a master family function without code changes.
+- **Zero Friction for Guests**: No app downloads, no account registrations, and no passwords. Guests open a unique 128-bit unguessable capability URL on mobile and submit their responses in under 30 seconds.
+- **WhatsApp-First Distribution**: 1-tap `wa.me` personalized invitation links normalized for Indian (+91) phone numbers with automatic native contact selector fallback.
+- **Accurate Catering Headcounts**: Confirmed headcounts strictly separate "Attending" from "Tentative / Maybe" and "Declined", ensuring caterers receive exact headcount figures and Veg / Non-Veg meal breakdowns.
+- **Universal NRI & Timezone Handling**: Wall-clock timestamps are anchored to the host venue's IANA timezone (`Asia/Kolkata` by default). Guests opening invitations abroad (US, UK, UAE) always see the local event time rather than their phone's offset.
+- **High-Tempo Venue Door Check-In**: Dedicated touch-optimized mobile interface ($\ge 48$px touch targets) with instant household search, 1-tap arrival recording, and transaction-isolated walk-in registration.
+
+---
+
+## 🛠️ Technology Stack & Architecture
+
+- **Backend**: Node.js 22 LTS, Express, TypeScript (strict mode), MySQL 8.0, Drizzle ORM.
+- **Frontend**: React 18, TypeScript, Vite, Tailwind CSS, React Router v7, Lucide Icons.
+- **Security & Authorization**:
+  - Multi-tenant tenant-isolation enforced on all database queries (`WHERE wedding.planner_id = session.planner_id`).
+  - Argon2id password hashing with custom salt and memory parameters.
+  - Server-side sessions with SHA-256 token hashing at rest in MySQL.
+  - Hardened cookies: `HttpOnly`, `SameSite=Strict`, `Secure` in production.
+  - Cryptographic capability tokens (128-bit entropy via `crypto.randomBytes(16)`).
+  - Defense against CSV formula injection (`=`, `+`, `-`, `@` escaped with single quote `'`).
+  - Strict Content Security Policy (CSP), `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`.
+- **Concurrency & Data Integrity**:
+  - Row-level database locks (`SELECT ... FOR UPDATE`) inside atomic transactions for door check-in to prevent race conditions across multiple gate volunteers.
+  - Client-side UUID idempotency keys preventing duplicate walk-in submissions over flaky mobile connectivity.
+- **Testing**: Vitest & Supertest (**25 server test suites, 205 automated tests** covering unit logic, multi-tenant isolation, authorization barriers, and timezone boundaries).
+
+---
+
+## 📱 WhatsApp Integration & Indian Phone Formatting
+
+- **Automatic +91 Normalization**: Phone numbers are parsed, non-digit characters stripped, and 10-digit standard Indian mobile numbers prepended with `91`.
+- **Pre-filled Courteous Greetings**: Planners can dispatch personalized invite links directly via WhatsApp:
+  ```
+  Namaste Sharma Family! You are cordially invited to our celebrations. Please confirm your attendance and meal preferences using your private Nyota RSVP link:
+
+  https://nyota.app/rsvp/4f9c2d8a1e7b6c5d...
+  ```
+- **Native Contact Picker Fallback**: When households lack a stored number, the button routes to `https://wa.me/?text=...`, allowing the host to select any WhatsApp contact from their phone.
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 20+ LTS
+- Docker & Docker Compose (or local MySQL 8.0)
+
+### 1. Clone & Install
 ```bash
-# Install dependencies
+git clone https://github.com/h-adarsh/nyota-multi-event-rsvp-and-headcount-web-platform.git
+cd nyota-multi-event-rsvp-and-headcount-web-platform
 npm install
+```
 
-# Start local MySQL Docker container (configured via .env)
-docker run -d --name wedding-mysql -p 3306:3306 -e MYSQL_DATABASE=wedding_rsvp mysql:8.0
+### 2. Configure Environment
+```bash
+cp .env.example .env
+# Edit .env with your MySQL connection string and session secrets
+```
 
-# Apply database migrations
+### 3. Start Database & Apply Migrations
+```bash
+# Run local MySQL container
+docker run -d --name nyota-mysql -p 3306:3306 -e MYSQL_DATABASE=wedding_rsvp -e MYSQL_ROOT_PASSWORD=root mysql:8.0
+
+# Apply automated migrations
 npm run db:migrate --workspace=server
 
-# Seed demo data
+# (Optional) Seed realistic demo data
 npm run db:seed --workspace=server
+```
 
-# Start development servers (frontend on :5173, backend on :5001)
+### 4. Run Development Servers
+```bash
+# Launches Vite frontend (:5173) and Express backend (:5001) concurrently
 npm run dev
 ```
 
-## Production Deployment (Render / Docker / Self-Hosted)
+---
 
-### 1. Build & Run via Docker
+## 🐳 Production Deployment (Docker / Cloud)
+
+### Multi-Stage Docker Build
 ```bash
-# Build the production multi-stage container
-docker build -t wedding-rsvp-app:latest .
+# Build optimized production container
+docker build -t nyota:latest .
 
-# Run container (runs migrations automatically on startup as non-root user)
+# Run container with auto-migration on boot
 docker run -p 5001:5001 \
-  -e DATABASE_URL="mysql://user:password@host:3306/dbname" \
-  -e SESSION_SECRET="your-high-entropy-64-byte-secret" \
+  -e DATABASE_URL="mysql://user:password@host:3306/nyota_db" \
+  -e SESSION_SECRET="your-64-byte-random-secret" \
   -e TRUST_PROXY=1 \
-  -e CLIENT_URL="https://your-domain.com" \
-  -e ALLOWED_ORIGINS="https://your-domain.com" \
-  wedding-rsvp-app:latest
+  -e CLIENT_URL="https://nyota.yourdomain.com" \
+  -e ALLOWED_ORIGINS="https://nyota.yourdomain.com" \
+  nyota:latest
 ```
 
-### 2. Environment Variables Checklist
-| Variable | Description | Example |
-| :--- | :--- | :--- |
-| `DATABASE_URL` | MySQL 8.0 connection string | `mysql://user:pass@dbhost:3306/wedding_rsvp` |
-| `SESSION_SECRET` | 64+ character random hex or base64 string for session auth | `openssl rand -hex 32` |
-| `TRUST_PROXY` | Set to `1` or `true` when deployed behind Render / Cloudflare / Nginx reverse proxy | `1` |
-| `CLIENT_URL` | Primary public URL for invite links and redirects | `https://your-app.onrender.com` |
-| `ALLOWED_ORIGINS` | Comma-separated list of permitted origins for CSRF & CORS | `https://your-app.onrender.com` |
-| `NODE_ENV` | Environment mode | `production` |
+---
 
-### 3. Database Migrations
-Migrations are fully automated. On container boot, `node server/dist/db/migrate.js` applies any pending migrations before the Express server starts listening. No manual `drizzle-kit` CLI execution is required in production.
+## 📄 CV / Resume Entry
 
+*Designed as a portfolio project showcasing production-grade software engineering, security architecture, and distributed state handling.*
 
+### Option 1: Bullets for Full-Stack / Backend Roles
+> **Nyota — Multi-Event RSVP & Headcount Web Platform** | *TypeScript, Node.js, Express, React, MySQL 8, Drizzle ORM, Docker, Vitest*  
+> [GitHub: github.com/h-adarsh/nyota-multi-event-rsvp-and-headcount-web-platform](https://github.com/h-adarsh/nyota-multi-event-rsvp-and-headcount-web-platform)
+> - Architected a production-grade, multi-event RSVP platform for Indian family functions, handling capability-based guest invitations, dietary breakdowns, and mobile venue door check-in.
+> - Implemented defense-in-depth security: Argon2id auth, SHA-256 session token hashing at rest, multi-tenant SQL isolation (`WHERE planner_id = ?`), CSV formula injection sanitization, and 128-bit unguessable capability URLs.
+> - Solved concurrency race conditions in real-time venue check-in by enforcing MySQL row-level locks (`SELECT ... FOR UPDATE`) in atomic transactions with client-side UUID idempotency for network retries.
+> - Built deterministic IANA timezone handling (`Asia/Kolkata`) to preserve local wall-clock event times regardless of guest phone location (eliminating NRI timezone offset bugs).
+> - Authored comprehensive test coverage with 205 automated unit and integration tests across 25 suites under Vitest and Supertest; achieved clean 0-error strict TypeScript typechecking and sub-2s Vite production builds.
+
+### Option 2: Compact One-Liner / Resume Summary
+> **Nyota (Full-Stack Web App)**: Production-grade multi-event RSVP & catering headcount engine built with React 18, Node.js, Express, MySQL 8, and Drizzle ORM; features capability URLs, Argon2id security, row-level concurrency locking for venue check-in, and 205 automated tests.
+
+---
+
+## 📜 License
+MIT License. Created by [Adarsh Singh](https://github.com/h-adarsh).

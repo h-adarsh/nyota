@@ -7,7 +7,7 @@ describe('GET /api/health', () => {
     const res = await request(app).get('/api/health');
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty('status', 'ok');
-    expect(res.body).toHaveProperty('service', 'wedding-rsvp-api');
+    expect(res.body).toHaveProperty('service', 'nyota-api');
     expect(res.body).toHaveProperty('timestamp');
   });
 });

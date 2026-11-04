@@ -57,7 +57,7 @@ app.use(csrfProtection);
 app.get('/api/health', (_req: Request, res: Response) => {
   res.json({
     status: 'ok',
-    service: 'wedding-rsvp-api',
+    service: 'nyota-api',
     timestamp: new Date().toISOString(),
   });
 });

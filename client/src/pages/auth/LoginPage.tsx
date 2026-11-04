@@ -41,10 +41,10 @@ export const LoginPage: React.FC = () => {
             <CalendarHeart className="w-7 h-7" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-            Planner Sign In
+            Nyota Planner Sign In
           </h1>
           <p className="text-slate-500 text-sm mt-1.5">
-            Manage your wedding guest lists, RSVPs, and caterer headcounts.
+            RSVP and headcount for Indian family functions.
           </p>
         </div>
 

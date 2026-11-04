@@ -414,7 +414,7 @@ export const GuestRsvpPage: React.FC = () => {
           </div>
 
           <p className="text-xs font-bold uppercase tracking-widest text-rose-600">
-            Wedding Invitation
+            Celebration Invitation
           </p>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
             {wedding.coupleNames}
@@ -528,7 +528,7 @@ export const GuestRsvpPage: React.FC = () => {
                         <span className="w-5 h-5 rounded-full bg-rose-50 text-rose-600 inline-flex items-center justify-center text-[11px] font-bold">
                           {idx + 1}
                         </span>
-                        <span>Wedding Event</span>
+                        <span>Function</span>
                       </div>
                       <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
                         {fn.name}
@@ -751,7 +751,7 @@ export const GuestRsvpPage: React.FC = () => {
                   {resp.status === 'maybe' && (
                     <div className="pt-4 border-t border-slate-100 space-y-3 animate-in fade-in duration-200 text-xs text-slate-600">
                       <p className="leading-relaxed bg-amber-50/70 p-3 rounded-2xl border border-amber-100 text-amber-900">
-                        We will hold tentative capacity for you. You can update this response closer to the wedding date.
+                        We will hold tentative capacity for you. You can update this response closer to the event date.
                       </p>
 
                       <div>

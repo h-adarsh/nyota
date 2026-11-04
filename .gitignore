@@ -3,9 +3,10 @@ node_modules/
 .pnp
 .pnp.js
 
-# Build outputs
+# Build outputs & test coverage
 dist/
 build/
+coverage/
 *.tsbuildinfo
 
 # Environment variables & secrets
@@ -13,6 +14,9 @@ build/
 .env.local
 .env.*.local
 *.local
+*.pem
+*.key
+*.cert
 
 # Logs
 logs

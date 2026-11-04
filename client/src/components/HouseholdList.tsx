@@ -63,7 +63,7 @@ export const HouseholdList: React.FC<HouseholdListProps> = ({
   const handleWhatsAppShare = (household: Household) => {
     const origin = window.location.origin;
     const url = `${origin}/rsvp/${household.inviteToken}`;
-    const message = `Namaste ${household.name}! You are cordially invited to our wedding celebrations. Please confirm your attendance and meal preferences using your private RSVP link:\n\n${url}`;
+    const message = `Namaste ${household.name}! You are cordially invited to our celebrations. Please confirm your attendance and meal preferences using your private Nyota RSVP link:\n\n${url}`;
 
     let cleanDigits = household.phone ? household.phone.replace(/\D/g, '') : '';
     // If standard 10-digit Indian mobile number without country code, prepend 91

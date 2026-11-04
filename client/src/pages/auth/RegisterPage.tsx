@@ -48,10 +48,10 @@ export const RegisterPage: React.FC = () => {
             <CalendarHeart className="w-7 h-7" />
           </div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-            Create Planner Account
+            Join Nyota
           </h1>
           <p className="text-slate-500 text-sm mt-1.5">
-            Start organizing your wedding events and catering headcounts.
+            RSVP and headcount for Indian family functions.
           </p>
         </div>
 

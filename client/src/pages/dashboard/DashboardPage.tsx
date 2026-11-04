@@ -189,7 +189,7 @@ export const DashboardPage: React.FC = () => {
               <CalendarHeart className="w-5 h-5" />
             </div>
             <div>
-              <span className="font-bold text-slate-900 text-sm sm:text-base tracking-tight">Wedding RSVP</span>
+              <span className="font-bold text-slate-900 text-sm sm:text-base tracking-tight">Nyota</span>
               <span className="hidden sm:inline-block ml-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
                 Planner Portal
               </span>

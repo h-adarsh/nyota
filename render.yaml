@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: wedding-rsvp-headcount
+    name: nyota
     env: docker
     dockerfilePath: Dockerfile
     plan: free
