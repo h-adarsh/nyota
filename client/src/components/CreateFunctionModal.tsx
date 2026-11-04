@@ -63,19 +63,19 @@ export const CreateFunctionModal: React.FC<CreateFunctionModalProps> = ({
       subtitle="Configure an individual event (Mehendi, Sangeet, Ceremony, Reception)"
     >
       {errorMsg && (
-        <div className="mb-4 p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-800 text-xs">
-          <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+        <div className="mb-4 p-3.5 rounded-[24px] bg-[#e4eff7] border border-[#000000] flex items-start gap-2.5 text-[#0a1217] text-xs">
+          <AlertCircle className="w-4 h-4 text-[#0a1217] flex-shrink-0 mt-0.5" />
           <span>{errorMsg}</span>
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-medium text-[#0a1217] uppercase tracking-wider mb-1.5">
             Function Name
           </label>
-          <div className="relative mb-2">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <div className="relative mb-2.5">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#85898b]">
               <CalendarHeart className="w-4 h-4" />
             </div>
             <input
@@ -84,20 +84,20 @@ export const CreateFunctionModal: React.FC<CreateFunctionModalProps> = ({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Sangeet & Cocktail"
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+              className="w-full pl-11 pr-4 py-2.5 rounded-[24px] border border-[#000000] text-[#0a1217] text-sm bg-white focus:outline-none placeholder:text-[#85898b]"
             />
           </div>
 
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {COMMON_PRESETS.map((preset) => (
               <button
                 key={preset}
                 type="button"
                 onClick={() => setName(preset)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   name === preset
-                    ? 'bg-rose-100 text-rose-700 font-semibold border border-rose-200'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                    ? 'bg-[#0a1217] text-white'
+                    : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#0a1217]/10'
                 }`}
               >
                 {preset}
@@ -107,11 +107,11 @@ export const CreateFunctionModal: React.FC<CreateFunctionModalProps> = ({
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-medium text-[#0a1217] uppercase tracking-wider mb-1.5">
             Date & Scheduled Time
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#85898b]">
               <Clock className="w-4 h-4" />
             </div>
             <input
@@ -119,17 +119,17 @@ export const CreateFunctionModal: React.FC<CreateFunctionModalProps> = ({
               required
               value={dateTime}
               onChange={(e) => setDateTime(e.target.value)}
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+              className="w-full pl-11 pr-4 py-2.5 rounded-[24px] border border-[#000000] text-[#0a1217] text-sm bg-white focus:outline-none"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1">
+          <label className="block text-xs font-medium text-[#0a1217] uppercase tracking-wider mb-1.5">
             Venue / Hall Location
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-[#85898b]">
               <MapPin className="w-4 h-4" />
             </div>
             <input
@@ -138,23 +138,23 @@ export const CreateFunctionModal: React.FC<CreateFunctionModalProps> = ({
               value={venue}
               onChange={(e) => setVenue(e.target.value)}
               placeholder="e.g. The Grand Ballroom / Poolside Lawn"
-              className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+              className="w-full pl-11 pr-4 py-2.5 rounded-[24px] border border-[#000000] text-[#0a1217] text-sm bg-white focus:outline-none placeholder:text-[#85898b]"
             />
           </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#0a1217]/10">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+            className="px-5 py-2.5 rounded-full text-xs font-medium text-[#0a1217] border border-[#0a1217]/20 hover:border-[#0a1217] transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-2 disabled:opacity-60"
+            className="px-6 py-2.5 rounded-full bg-[#0a1217] hover:bg-[#0a1217]/90 text-white text-xs font-medium transition-all flex items-center gap-2 disabled:opacity-50"
           >
             {isSubmitting ? (
               <>

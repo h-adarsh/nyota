@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import {
-  CalendarHeart,
   LogOut,
   Plus,
   Calendar,
@@ -12,7 +11,6 @@ import {
   ChevronDown,
   ChevronRight,
   Loader2,
-  Sparkles,
   Users,
   Calculator,
   UserCheck,
@@ -71,7 +69,7 @@ export const DashboardPage: React.FC = () => {
         setHouseholds([]);
       }
     } catch (err) {
-      console.error('Failed to load weddings:', err);
+      console.error('Failed to load events:', err);
     } finally {
       setIsLoadingWeddings(false);
     }
@@ -88,7 +86,7 @@ export const DashboardPage: React.FC = () => {
       setFunctions(fns);
       setHouseholds(hhs);
     } catch (err) {
-      console.error('Failed to load wedding data:', err);
+      console.error('Failed to load event data:', err);
     } finally {
       setIsLoadingContent(false);
     }
@@ -105,8 +103,12 @@ export const DashboardPage: React.FC = () => {
   }, [activeWedding, loadWeddingData]);
 
   const handleLogout = async () => {
-    await logout();
-    navigate('/login');
+    try {
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      console.error('Failed to logout:', err);
+    }
   };
 
   const handleWeddingCreated = (newWedding: Wedding) => {
@@ -125,7 +127,8 @@ export const DashboardPage: React.FC = () => {
       await deleteWeddingApi(activeWedding.id);
       await loadWeddings();
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete wedding');
+      console.error('Failed to delete event:', err);
+      alert('Failed to delete event');
     }
   };
 
@@ -134,39 +137,36 @@ export const DashboardPage: React.FC = () => {
   };
 
   const handleDeleteFunction = async (fn: WeddingFunction) => {
-    const confirmed = window.confirm(`Remove function "${fn.name}"?`);
+    const confirmed = window.confirm(
+      `Delete function "${fn.name}"? This will remove all invitation assignments and RSVPs for this function.`
+    );
     if (!confirmed) return;
 
     try {
       await deleteFunctionApi(fn.id);
-      setFunctions((prev) => prev.filter((item) => item.id !== fn.id));
+      setFunctions((prev) => prev.filter((f) => f.id !== fn.id));
     } catch (err) {
-      alert(err instanceof Error ? err.message : 'Failed to delete function');
+      console.error('Failed to delete function:', err);
+      alert('Failed to delete function');
     }
   };
 
-  const handleHouseholdCreated = (newHh: Household) => {
-    setHouseholds((prev) => [newHh, ...prev]);
-  };
-
   const handleHouseholdDeleted = (id: string) => {
-    setHouseholds((prev) => prev.filter((item) => item.id !== id));
+    setHouseholds((prev) => prev.filter((h) => h.id !== id));
   };
 
-  const handleHouseholdUpdated = (updatedHh: Household) => {
-    setHouseholds((prev) => prev.map((item) => (item.id === updatedHh.id ? updatedHh : item)));
+  const handleHouseholdUpdated = (updated: Household) => {
+    setHouseholds((prev) => prev.map((h) => (h.id === updated.id ? updated : h)));
   };
 
   const formatEventDateTime = (dateStr: string) => {
-    const date = new Date(dateStr);
     const timeZone = activeWedding?.timezone || 'Asia/Kolkata';
-    return date.toLocaleDateString('en-IN', {
+    const d = new Date(dateStr);
+    return d.toLocaleString('en-IN', {
       timeZone,
-      weekday: 'short',
       month: 'short',
       day: 'numeric',
-      year: 'numeric',
-      hour: 'numeric',
+      hour: '2-digit',
       minute: '2-digit',
       hour12: true,
     });
@@ -180,68 +180,64 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-['Plus_Jakarta_Sans',sans-serif]">
-      {/* Navigation Header */}
-      <header className="bg-white border-b border-slate-200/80 sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div className="min-h-screen bg-[#ffffff] text-[#0a1217] flex flex-col font-sans">
+      {/* Sana Minimal Top Navigation */}
+      <header className="bg-[#ffffff] border-b border-[#0a1217]/10 sticky top-0 z-30">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 h-18 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-100 shadow-sm">
-              <CalendarHeart className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="font-bold text-slate-900 text-sm sm:text-base tracking-tight">Nyota</span>
-              <span className="hidden sm:inline-block ml-2 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
-                Planner Portal
-              </span>
-            </div>
+            <span className="font-serif text-2xl font-normal tracking-tight text-[#0a1217]">
+              Nyota.
+            </span>
+            <span className="hidden sm:inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-[#e4eff7] text-[#0a1217]">
+              Planner Portal
+            </span>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <div className="text-right hidden sm:block">
-              <p className="text-xs font-semibold text-slate-800">{user?.name}</p>
-              <p className="text-[11px] text-slate-500">{user?.email}</p>
+              <p className="text-[13px] font-medium text-[#0a1217]">{user?.name}</p>
+              <p className="text-[11px] text-[#85898b]">{user?.email}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 sm:px-3 sm:py-1.5 rounded-xl border border-slate-200 text-slate-600 hover:text-slate-900 hover:bg-slate-50 text-xs font-medium flex items-center gap-1.5 transition-colors"
+              className="p-2 sm:px-4 sm:py-2 rounded-full border border-[#0a1217]/20 text-[#0a1217] hover:bg-[#e4eff7] text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
               title="Sign Out"
             >
-              <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Sign Out</span>
+              <LogOut className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Sign out</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Workspace Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-8">
+      {/* Main Workspace Area (1200px max width) */}
+      <main className="flex-1 max-w-[1200px] w-full mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {isLoadingWeddings ? (
-          <div className="py-20 flex flex-col items-center justify-center text-slate-400">
-            <Loader2 className="w-8 h-8 animate-spin text-rose-500 mb-3" />
-            <p className="text-xs font-medium">Loading your weddings...</p>
+          <div className="py-24 flex flex-col items-center justify-center text-[#85898b]">
+            <Loader2 className="w-8 h-8 animate-spin text-[#0a1217] mb-3" />
+            <p className="text-sm font-normal">Loading your events...</p>
           </div>
         ) : weddings.length === 0 ? (
-          /* Empty State: No Weddings Created */
-          <div className="bg-white rounded-2xl border border-dashed border-slate-300 p-8 sm:p-14 text-center my-6">
-            <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 border border-rose-100">
-              <Sparkles className="w-7 h-7" />
-            </div>
-            <h2 className="text-xl font-bold text-slate-900 tracking-tight">No weddings registered yet</h2>
-            <p className="text-slate-500 text-sm max-w-md mx-auto mt-2 mb-6">
-              Create your first wedding project to configure functions (Mehendi, Sangeet, Ceremony, Reception), manage guest households, and calculate exact catering headcounts.
+          /* Empty State */
+          <div className="bg-[#e4eff7] rounded-[24px] p-8 sm:p-16 text-center my-6 border border-[#0a1217]/10">
+            <h2 className="font-serif text-3xl sm:text-4xl font-normal text-[#0a1217] tracking-tight">
+              No family functions registered yet
+            </h2>
+            <p className="text-[#85898b] text-sm sm:text-base max-w-md mx-auto mt-3 mb-8">
+              Create your first event project to configure individual functions, manage guest households, and calculate exact catering headcounts.
             </p>
             <button
               onClick={() => setIsWeddingModalOpen(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs sm:text-sm font-semibold shadow-md shadow-rose-600/20 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3.5 rounded-full bg-[#0a1217] text-white text-sm font-medium hover:opacity-90 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4" />
-              <span>Create First Wedding</span>
+              <span>Create First Function</span>
             </button>
           </div>
         ) : (
-          /* Active Wedding Dashboard View */
+          /* Active Event Dashboard View */
           <div>
-            {/* Top Controls: Wedding Switcher & Actions */}
+            {/* Top Controls: Event Switcher & Actions */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
               <div className="flex items-center gap-3">
                 <div className="relative">
@@ -251,7 +247,7 @@ export const DashboardPage: React.FC = () => {
                       const found = weddings.find((w) => w.id === e.target.value);
                       if (found) setActiveWedding(found);
                     }}
-                    className="appearance-none bg-white border border-slate-200 text-slate-900 font-bold text-base sm:text-lg rounded-xl pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 shadow-sm"
+                    className="appearance-none bg-white border border-[#000000] text-[#0a1217] font-medium text-sm sm:text-base rounded-full pl-4 pr-10 py-2.5 focus:outline-none cursor-pointer"
                   >
                     {weddings.map((w) => (
                       <option key={w.id} value={w.id}>
@@ -259,30 +255,30 @@ export const DashboardPage: React.FC = () => {
                       </option>
                     ))}
                   </select>
-                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <ChevronDown className="w-4 h-4 text-[#0a1217] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
 
                 <button
                   onClick={() => setIsWeddingModalOpen(true)}
-                  className="p-2 sm:px-3 sm:py-2 rounded-xl border border-dashed border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-400 bg-white text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
-                  title="Create another wedding"
+                  className="px-4 py-2.5 rounded-full border border-[#0a1217]/20 text-[#0a1217] hover:bg-[#e4eff7] text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+                  title="Create another event"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">Add Wedding</span>
+                  <span className="hidden sm:inline">Add Event</span>
                 </button>
               </div>
 
               {activeWedding && (
                 <div className="flex items-center gap-2">
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-slate-500" />
+                  <div className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#e4eff7] text-[#0a1217] text-xs font-medium">
+                    <Calendar className="w-3.5 h-3.5 text-[#85898b]" />
                     <span>{formatDateRange(activeWedding.startDate, activeWedding.endDate)}</span>
                   </div>
 
                   <button
                     onClick={handleDeleteWedding}
-                    className="p-2 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                    title="Delete this wedding"
+                    className="p-2 rounded-full text-[#85898b] hover:text-[#0a1217] hover:bg-[#e4eff7] transition-colors cursor-pointer"
+                    title="Delete this event"
                   >
                     <Trash2 className="w-4 h-4" />
                   </button>
@@ -290,68 +286,87 @@ export const DashboardPage: React.FC = () => {
               )}
             </div>
 
-            {/* Wedding Overview Card */}
+            {/* Sana Dark Product Showcase Card (#0a1217, 24px radius, Electric Lime Accent) */}
             {activeWedding && (
-              <div className="bg-gradient-to-r from-rose-600 to-rose-700 rounded-2xl p-6 sm:p-8 text-white shadow-lg shadow-rose-600/10 mb-6">
-                <span className="text-[11px] font-bold uppercase tracking-wider text-rose-200">
-                  Active Wedding Event
-                </span>
-                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight mt-1 mb-2">
-                  {activeWedding.coupleNames}
-                </h2>
-                <p className="text-rose-100 text-xs sm:text-sm max-w-xl">
-                  {activeWedding.title} • {formatDateRange(activeWedding.startDate, activeWedding.endDate)}
-                </p>
+              <div className="bg-[#0a1217] text-white rounded-[24px] p-6 sm:p-10 mb-8 border border-[#0a1217] flex flex-col md:flex-row md:items-end justify-between gap-6">
+                <div>
+                  <span className="text-[13px] font-normal uppercase tracking-wider text-[#85898b]">
+                    Active Celebration
+                  </span>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-medium tracking-tight mt-1 mb-2 text-white">
+                    {activeWedding.coupleNames}
+                  </h2>
+                  <p className="text-[#85898b] text-sm sm:text-base max-w-xl">
+                    {activeWedding.title} • {formatDateRange(activeWedding.startDate, activeWedding.endDate)}
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    onClick={() => setIsFunctionModalOpen(true)}
+                    className="px-5 py-2.5 rounded-full bg-[#cdfe00] hover:bg-[#bfee00] text-[#0a1217] text-xs sm:text-sm font-medium transition-all flex items-center gap-2 cursor-pointer"
+                  >
+                    <Plus className="w-4 h-4 text-[#0a1217]" />
+                    <span>Add Function</span>
+                  </button>
+                  <button
+                    onClick={() => setIsHouseholdModalOpen(true)}
+                    className="px-5 py-2.5 rounded-full bg-white text-[#0a1217] hover:bg-[#e4eff7] text-xs sm:text-sm font-medium transition-all flex items-center gap-2 cursor-pointer"
+                  >
+                    <Users className="w-4 h-4 text-[#0a1217]" />
+                    <span>Add Household</span>
+                  </button>
+                </div>
               </div>
             )}
 
-            {/* Dashboard Navigation Tabs */}
-            <div className="flex items-center gap-2 border-b border-slate-200 mb-6 overflow-x-auto scrollbar-none">
+            {/* Sana Geometric Pill Navigation Tabs */}
+            <div className="flex items-center gap-2 mb-8 overflow-x-auto scrollbar-none pb-1">
               <button
                 onClick={() => setActiveTab('headcount')}
-                className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
                   activeTab === 'headcount'
-                    ? 'border-rose-600 text-rose-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'bg-[#0a1217] text-white'
+                    : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
                 }`}
               >
-                <Calculator className="w-4 h-4" />
+                <Calculator className="w-3.5 h-3.5" />
                 <span>Headcount & Catering</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('checkin')}
-                className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
                   activeTab === 'checkin'
-                    ? 'border-rose-600 text-rose-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'bg-[#0a1217] text-white'
+                    : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
                 }`}
               >
-                <UserCheck className="w-4 h-4" />
+                <UserCheck className="w-3.5 h-3.5" />
                 <span>Venue Check-In</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('functions')}
-                className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
                   activeTab === 'functions'
-                    ? 'border-rose-600 text-rose-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'bg-[#0a1217] text-white'
+                    : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
                 }`}
               >
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-3.5 h-3.5" />
                 <span>Functions ({functions.length})</span>
               </button>
 
               <button
                 onClick={() => setActiveTab('guests')}
-                className={`flex items-center gap-2 px-4 py-3 text-xs sm:text-sm font-bold border-b-2 whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap cursor-pointer ${
                   activeTab === 'guests'
-                    ? 'border-rose-600 text-rose-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-800'
+                    ? 'bg-[#0a1217] text-white'
+                    : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
                 }`}
               >
-                <Users className="w-4 h-4" />
+                <Users className="w-3.5 h-3.5" />
                 <span>Guest Registry ({households.length})</span>
               </button>
             </div>
@@ -376,17 +391,17 @@ export const DashboardPage: React.FC = () => {
             {/* Tab: Functions View */}
             {activeTab === 'functions' && (
               <div>
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900 tracking-tight">Wedding Functions</h3>
-                    <p className="text-slate-500 text-xs">
-                      Sub-events with individual dates, venues, and RSVP requirements
+                    <h3 className="text-xl font-medium text-[#0a1217] tracking-tight">Celebration Functions</h3>
+                    <p className="text-[#85898b] text-[13px] mt-0.5">
+                      Sub-events with individual dates, venues, and RSVP assignments
                     </p>
                   </div>
 
                   <button
                     onClick={() => setIsFunctionModalOpen(true)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-all"
+                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#0a1217] text-white text-xs sm:text-sm font-medium hover:opacity-90 transition-all cursor-pointer"
                   >
                     <Plus className="w-3.5 h-3.5" />
                     <span>Add Function</span>
@@ -394,51 +409,51 @@ export const DashboardPage: React.FC = () => {
                 </div>
 
                 {isLoadingContent ? (
-                  <div className="py-12 flex justify-center items-center text-slate-400">
-                    <Loader2 className="w-6 h-6 animate-spin text-rose-500" />
+                  <div className="py-16 flex justify-center items-center text-[#85898b]">
+                    <Loader2 className="w-6 h-6 animate-spin text-[#0a1217]" />
                   </div>
                 ) : functions.length === 0 ? (
-                  <div className="bg-white rounded-2xl border border-slate-200/80 p-8 text-center">
-                    <p className="text-slate-600 text-sm font-medium">No functions added to this wedding yet.</p>
-                    <p className="text-slate-400 text-xs mt-1 mb-4">
-                      Add Haldi, Mehendi, Sangeet, Wedding, or Reception to begin inviting guests.
+                  <div className="bg-[#e4eff7] rounded-[24px] p-8 text-center border border-[#0a1217]/10">
+                    <p className="text-[#0a1217] text-sm font-medium">No functions added to this event yet.</p>
+                    <p className="text-[#85898b] text-xs mt-1 mb-6">
+                      Add Haldi, Mehendi, Sangeet, Ceremony, or Reception to begin inviting guests.
                     </p>
                     <button
                       onClick={() => setIsFunctionModalOpen(true)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold transition-colors"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#0a1217] text-white text-xs font-medium cursor-pointer"
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Add First Function</span>
                     </button>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {functions.map((fn) => (
                       <div
                         key={fn.id}
-                        className="bg-white rounded-2xl border border-slate-200/80 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
+                        className="bg-[#e4eff7] rounded-[24px] p-6 border border-[#0a1217]/10 flex flex-col justify-between transition-colors"
                       >
                         <div>
-                          <div className="flex items-start justify-between gap-2 mb-3">
-                            <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 text-rose-700 border border-rose-100">
+                          <div className="flex items-start justify-between gap-2 mb-4">
+                            <span className="px-3 py-1 rounded-full text-xs font-medium bg-white text-[#0a1217] border border-[#0a1217]/10">
                               {fn.name}
                             </span>
                             <button
                               onClick={() => handleDeleteFunction(fn)}
-                              className="p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                              className="p-1.5 rounded-full text-[#85898b] hover:text-[#0a1217] hover:bg-white/50 transition-colors cursor-pointer"
                               title="Delete function"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
                           </div>
 
-                          <div className="space-y-2 text-xs text-slate-600">
+                          <div className="space-y-2 text-xs text-[#0a1217]/80">
                             <div className="flex items-center gap-2">
-                              <Clock className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-                              <span>{formatEventDateTime(fn.dateTime)}</span>
+                              <Clock className="w-3.5 h-3.5 text-[#85898b] flex-shrink-0" />
+                              <span className="font-normal">{formatEventDateTime(fn.dateTime)}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                              <MapPin className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
+                              <MapPin className="w-3.5 h-3.5 text-[#85898b] flex-shrink-0" />
                               <span className="truncate">{fn.venue}</span>
                             </div>
                           </div>
@@ -447,13 +462,10 @@ export const DashboardPage: React.FC = () => {
                         <button
                           type="button"
                           onClick={() => setSelectedFunctionForInvites(fn)}
-                          className="mt-4 pt-3 border-t border-slate-100 w-full flex items-center justify-between text-xs font-semibold text-rose-600 hover:text-rose-700 transition-colors group"
+                          className="mt-6 pt-4 border-t border-[#0a1217]/10 w-full flex items-center justify-between text-xs font-medium text-[#0a1217] hover:opacity-75 transition-opacity cursor-pointer"
                         >
-                          <span className="flex items-center gap-1.5">
-                            <Users className="w-3.5 h-3.5 text-rose-500 group-hover:scale-110 transition-transform" />
-                            <span>Manage Invitations</span>
-                          </span>
-                          <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                          <span>Manage Invitations</span>
+                          <ChevronRight className="w-4 h-4 text-[#85898b]" />
                         </button>
                       </div>
                     ))}
@@ -462,24 +474,22 @@ export const DashboardPage: React.FC = () => {
               </div>
             )}
 
-            {/* Tab 2: Guest Registry View */}
+            {/* Tab: Guests View */}
             {activeTab === 'guests' && activeWedding && (
-              <div>
-                <HouseholdList
-                  weddingId={activeWedding.id}
-                  households={households}
-                  onHouseholdDeleted={handleHouseholdDeleted}
-                  onHouseholdUpdated={handleHouseholdUpdated}
-                  onOpenAddModal={() => setIsHouseholdModalOpen(true)}
-                  onOpenImportModal={() => setIsImportModalOpen(true)}
-                />
-              </div>
+              <HouseholdList
+                weddingId={activeWedding.id}
+                households={households}
+                onHouseholdDeleted={handleHouseholdDeleted}
+                onHouseholdUpdated={handleHouseholdUpdated}
+                onOpenAddModal={() => setIsHouseholdModalOpen(true)}
+                onOpenImportModal={() => setIsImportModalOpen(true)}
+              />
             )}
           </div>
         )}
       </main>
 
-      {/* Creation Modals */}
+      {/* Modals */}
       <CreateWeddingModal
         isOpen={isWeddingModalOpen}
         onClose={() => setIsWeddingModalOpen(false)}
@@ -490,36 +500,37 @@ export const DashboardPage: React.FC = () => {
         <>
           <CreateFunctionModal
             isOpen={isFunctionModalOpen}
-            weddingId={activeWedding.id}
             onClose={() => setIsFunctionModalOpen(false)}
+            weddingId={activeWedding.id}
             onFunctionCreated={handleFunctionCreated}
           />
 
           <CreateHouseholdModal
             isOpen={isHouseholdModalOpen}
-            weddingId={activeWedding.id}
             onClose={() => setIsHouseholdModalOpen(false)}
-            onHouseholdCreated={handleHouseholdCreated}
+            weddingId={activeWedding.id}
+            onHouseholdCreated={(newHh) => setHouseholds((prev) => [newHh, ...prev])}
           />
 
           <CsvImportModal
             isOpen={isImportModalOpen}
-            weddingId={activeWedding.id}
             onClose={() => setIsImportModalOpen(false)}
+            weddingId={activeWedding.id}
             onImportComplete={() => loadWeddingData(activeWedding.id)}
           />
 
-          <FunctionInvitationsModal
-            isOpen={Boolean(selectedFunctionForInvites)}
-            weddingFunction={selectedFunctionForInvites}
-            onClose={() => setSelectedFunctionForInvites(null)}
-            onInvitationsUpdated={() => {
-              if (activeWedding) loadWeddingData(activeWedding.id);
-            }}
-          />
+          {selectedFunctionForInvites && (
+            <FunctionInvitationsModal
+              isOpen={Boolean(selectedFunctionForInvites)}
+              onClose={() => setSelectedFunctionForInvites(null)}
+              weddingFunction={selectedFunctionForInvites}
+              onInvitationsUpdated={() => {
+                if (activeWedding) loadWeddingData(activeWedding.id);
+              }}
+            />
+          )}
         </>
       )}
     </div>
   );
 };
-

@@ -177,8 +177,6 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
 
   // Toggle single household invitation
   const handleToggle = (household: FunctionInvitationHousehold) => {
-    // Only lock active headcounts ('yes' and 'maybe').
-    // Declined households ('no') have zero headcount and can be uninvited cleanly.
     if (household.rsvpStatus === 'yes' || household.rsvpStatus === 'maybe') {
       return;
     }
@@ -244,7 +242,6 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
     setInvitedIds((prev) => {
       const next = new Set(prev);
       for (const h of filteredHouseholds) {
-        // Only skip if attending or maybe to protect headcounts
         if (h.rsvpStatus !== 'yes' && h.rsvpStatus !== 'maybe') {
           next.delete(h.id);
         }
@@ -303,53 +300,53 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
     >
       <div className="space-y-4">
         {/* Metric Summary Badges */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-          <div className="p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div className="p-3.5 rounded-[24px] bg-[#e4eff7] text-center border border-[#e4eff7]">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">
               Invited Households
             </span>
-            <p className="text-lg font-black text-slate-800 mt-0.5">
+            <p className="text-xl font-medium text-[#0a1217] mt-0.5">
               {stats.invitedCount}
-              <span className="text-xs font-normal text-slate-400"> / {stats.total}</span>
+              <span className="text-xs font-normal text-[#85898b]"> / {stats.total}</span>
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">
+          <div className="p-3.5 rounded-[24px] bg-[#0a1217] text-white text-center">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">
               Confirmed (Yes)
             </span>
-            <p className="text-lg font-black text-emerald-800 mt-0.5">
+            <p className="text-xl font-medium text-white mt-0.5">
               {stats.yesCount}
-              <span className="text-xs font-semibold text-emerald-600"> ({stats.yesGuests} guests)</span>
+              <span className="text-xs font-medium text-[#cdfe00]"> ({stats.yesGuests} guests)</span>
             </p>
           </div>
 
-          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200/80 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-rose-700">
+          <div className="p-3.5 rounded-[24px] bg-[#ffffff] border border-[#0a1217]/20 text-center">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">
               Declined (No)
             </span>
-            <p className="text-lg font-black text-rose-800 mt-0.5">{stats.noCount}</p>
+            <p className="text-xl font-medium text-[#0a1217] mt-0.5">{stats.noCount}</p>
           </div>
 
-          <div className="p-3 rounded-xl bg-amber-50 border border-amber-200/80 text-center">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700">
+          <div className="p-3.5 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
+            <span className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">
               Tentative (Maybe)
             </span>
-            <p className="text-lg font-black text-amber-800 mt-0.5">{stats.maybeCount}</p>
+            <p className="text-xl font-medium text-[#0a1217] mt-0.5">{stats.maybeCount}</p>
           </div>
         </div>
 
         {/* Notifications */}
         {errorMsg && (
-          <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2 text-rose-800 text-xs">
-            <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-[24px] bg-[#e4eff7] border border-[#000000] flex items-start gap-2 text-[#0a1217] text-xs">
+            <AlertCircle className="w-4 h-4 text-[#0a1217] flex-shrink-0 mt-0.5" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2 text-emerald-800 text-xs">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-[24px] bg-[#0a1217] text-white flex items-start gap-2 text-xs">
+            <CheckCircle2 className="w-4 h-4 text-[#cdfe00] flex-shrink-0 mt-0.5" />
             <span>{successMsg}</span>
           </div>
         )}
@@ -357,23 +354,23 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
         {/* Search & Filter Toolbar */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
           <div className="relative flex-1">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-[#85898b] absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search by household, contact, or phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-800 focus:bg-white focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
+              className="w-full pl-10 pr-4 py-2 bg-white border border-[#000000] rounded-[24px] text-xs text-[#0a1217] focus:outline-none transition-all placeholder:text-[#85898b]"
             />
           </div>
 
-          {/* Filter Tabs */}
-          <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-xl text-xs font-semibold text-slate-600">
+          {/* Filter Tabs - Full Pills */}
+          <div className="flex items-center gap-1 p-1 bg-[#e4eff7] rounded-full text-xs font-medium text-[#85898b]">
             <button
               type="button"
               onClick={() => setActiveTab('all')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                activeTab === 'all' ? 'bg-white text-slate-900 shadow-sm' : 'hover:text-slate-900'
+              className={`px-3 py-1 rounded-full transition-all ${
+                activeTab === 'all' ? 'bg-[#0a1217] text-white' : 'hover:text-[#0a1217]'
               }`}
             >
               All ({stats.total})
@@ -381,8 +378,8 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
             <button
               type="button"
               onClick={() => setActiveTab('invited')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                activeTab === 'invited' ? 'bg-white text-rose-600 shadow-sm' : 'hover:text-slate-900'
+              className={`px-3 py-1 rounded-full transition-all ${
+                activeTab === 'invited' ? 'bg-[#0a1217] text-white' : 'hover:text-[#0a1217]'
               }`}
             >
               Invited ({stats.invitedCount})
@@ -390,8 +387,8 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
             <button
               type="button"
               onClick={() => setActiveTab('not_invited')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                activeTab === 'not_invited' ? 'bg-white text-slate-900 shadow-sm' : 'hover:text-slate-900'
+              className={`px-3 py-1 rounded-full transition-all ${
+                activeTab === 'not_invited' ? 'bg-[#0a1217] text-white' : 'hover:text-[#0a1217]'
               }`}
             >
               Not Invited ({stats.notInvitedCount})
@@ -399,8 +396,8 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
             <button
               type="button"
               onClick={() => setActiveTab('replied')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                activeTab === 'replied' ? 'bg-white text-emerald-700 shadow-sm' : 'hover:text-slate-900'
+              className={`px-3 py-1 rounded-full transition-all ${
+                activeTab === 'replied' ? 'bg-[#0a1217] text-white' : 'hover:text-[#0a1217]'
               }`}
             >
               Replied ({stats.repliedCount})
@@ -408,8 +405,8 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
             <button
               type="button"
               onClick={() => setActiveTab('stale')}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
-                activeTab === 'stale' ? 'bg-white text-amber-800 font-bold shadow-sm' : 'hover:text-slate-900'
+              className={`px-3 py-1 rounded-full transition-all ${
+                activeTab === 'stale' ? 'bg-[#0a1217] text-white' : 'hover:text-[#0a1217]'
               }`}
             >
               Stale ({stats.staleCount})
@@ -418,27 +415,27 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
         </div>
 
         {/* Quick Bulk Action Helpers */}
-        <div className="flex items-center justify-between text-xs text-slate-500 border-b border-slate-100 pb-2">
+        <div className="flex items-center justify-between text-xs text-[#85898b] border-b border-[#0a1217]/10 pb-2">
           <span>
-            Showing <strong className="text-slate-800">{filteredHouseholds.length}</strong> households
+            Showing <strong className="text-[#0a1217]">{filteredHouseholds.length}</strong> households
           </span>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={handleInviteVisible}
-              className="text-xs text-rose-600 hover:text-rose-700 font-semibold flex items-center gap-1 transition-colors"
+              className="text-xs text-[#0a1217] hover:underline font-medium flex items-center gap-1 transition-colors"
             >
               <UserPlus className="w-3.5 h-3.5" />
               <span>Invite Visible</span>
             </button>
 
-            <span className="text-slate-300">•</span>
+            <span className="text-[#85898b]">•</span>
 
             <button
               type="button"
               onClick={handleUninviteVisibleNoReply}
-              className="text-xs text-slate-500 hover:text-slate-700 font-semibold flex items-center gap-1 transition-colors"
+              className="text-xs text-[#85898b] hover:text-[#0a1217] font-medium flex items-center gap-1 transition-colors"
               title="Only removes households that have not submitted an RSVP"
             >
               <UserMinus className="w-3.5 h-3.5" />
@@ -449,28 +446,28 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
 
         {/* Household Invitation Checklist Table */}
         {isLoading ? (
-          <div className="py-16 flex flex-col items-center justify-center text-slate-400 gap-2">
-            <Loader2 className="w-6 h-6 animate-spin text-rose-500" />
+          <div className="py-16 flex flex-col items-center justify-center text-[#85898b] gap-2">
+            <Loader2 className="w-6 h-6 animate-spin text-[#0a1217]" />
             <span className="text-xs">Loading invitation assignments...</span>
           </div>
         ) : filteredHouseholds.length === 0 ? (
-          <div className="py-12 text-center text-slate-400 text-xs bg-slate-50/50 rounded-xl border border-slate-100">
+          <div className="py-12 text-center text-[#85898b] text-xs bg-[#e4eff7]/40 rounded-[24px] border border-[#e4eff7]">
             No households match your search or filter.
           </div>
         ) : (
-          <div className="max-h-[380px] overflow-y-auto rounded-xl border border-slate-200/90 shadow-inner">
+          <div className="max-h-[380px] overflow-y-auto rounded-[24px] border border-[#000000]">
             <table className="w-full text-left border-collapse text-xs">
-              <thead className="bg-slate-50 sticky top-0 border-b border-slate-200 text-[10px] uppercase font-bold text-slate-500 z-10">
+              <thead className="bg-[#e4eff7] sticky top-0 border-b border-[#000000] text-[10px] uppercase font-medium text-[#0a1217] z-10">
                 <tr>
-                  <th className="py-2.5 px-3 w-10 text-center">Invite</th>
-                  <th className="py-2.5 px-3">Household Name</th>
-                  <th className="py-2.5 px-3">Primary Contact</th>
-                  <th className="py-2.5 px-3">Phone</th>
-                  <th className="py-2.5 px-3 text-center">Party Size</th>
-                  <th className="py-2.5 px-3 text-right">Reply Status</th>
+                  <th className="py-2.5 px-3.5 w-10 text-center">Invite</th>
+                  <th className="py-2.5 px-3.5">Household Name</th>
+                  <th className="py-2.5 px-3.5">Primary Contact</th>
+                  <th className="py-2.5 px-3.5">Phone</th>
+                  <th className="py-2.5 px-3.5 text-center">Party Size</th>
+                  <th className="py-2.5 px-3.5 text-right">Reply Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100 bg-white">
+              <tbody className="divide-y divide-[#0a1217]/10 bg-white">
                 {filteredHouseholds.map((h) => {
                   const isInvited = invitedIds.has(h.id);
                   const isLocked = h.rsvpStatus === 'yes' || h.rsvpStatus === 'maybe';
@@ -479,14 +476,14 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
                     <tr
                       key={h.id}
                       className={`transition-colors ${
-                        isInvited ? 'bg-rose-50/20 hover:bg-rose-50/40' : 'hover:bg-slate-50/60'
+                        isInvited ? 'bg-[#e4eff7]/20 hover:bg-[#e4eff7]/40' : 'hover:bg-slate-50/60'
                       }`}
                     >
                       {/* Checkbox / Lock indicator */}
-                      <td className="py-2.5 px-3 text-center">
+                      <td className="py-2.5 px-3.5 text-center">
                         {isLocked ? (
                           <div
-                            className="inline-flex items-center justify-center w-5 h-5 rounded bg-emerald-100 text-emerald-700 cursor-not-allowed"
+                            className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#0a1217] text-white cursor-not-allowed"
                             title={`Locked: Household has active attendance ('${h.rsvpStatus}'). To uninvite, click "Reset RSVP" on the right.`}
                           >
                             <Lock className="w-3 h-3" />
@@ -496,45 +493,45 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
                             type="checkbox"
                             checked={isInvited}
                             onChange={() => handleToggle(h)}
-                            className="w-4 h-4 rounded text-rose-600 focus:ring-rose-500 border-slate-300 cursor-pointer"
+                            className="w-4 h-4 rounded accent-[#0a1217] cursor-pointer"
                           />
                         )}
                       </td>
 
                       {/* Household Name */}
-                      <td className="py-2.5 px-3 font-semibold text-slate-900">
+                      <td className="py-2.5 px-3.5 font-medium text-[#0a1217]">
                         {h.name}
                         {h.notes && (
-                          <span className="block text-[10px] font-normal text-slate-400 truncate max-w-xs">
+                          <span className="block text-[10px] font-normal text-[#85898b] truncate max-w-xs">
                             {h.notes}
                           </span>
                         )}
                       </td>
 
                       {/* Primary Contact */}
-                      <td className="py-2.5 px-3 text-slate-700">{h.primaryContactName}</td>
+                      <td className="py-2.5 px-3.5 text-[#85898b]">{h.primaryContactName}</td>
 
                       {/* Phone */}
-                      <td className="py-2.5 px-3 font-mono text-[11px] text-slate-500">{h.phone}</td>
+                      <td className="py-2.5 px-3.5 text-[11px] text-[#85898b]">{h.phone}</td>
 
                       {/* Expected Party Size */}
-                      <td className="py-2.5 px-3 text-center font-bold text-slate-800">
+                      <td className="py-2.5 px-3.5 text-center font-medium text-[#0a1217]">
                         {h.expectedPartySize}
                       </td>
 
                       {/* Reply Status Badge & Reset Action */}
-                      <td className="py-2.5 px-3 text-right">
+                      <td className="py-2.5 px-3.5 text-right">
                         {h.rsvpStatus === 'yes' ? (
                           <div className="inline-flex items-center justify-end gap-1.5 flex-wrap">
                             {h.isStale && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300"
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#0a1217] border border-[#0a1217]/20"
                                 title={`RSVP submitted ${h.daysAgo} days ago without updates`}
                               >
-                                ⚠️ Stale ({h.daysAgo}d)
+                                Stale ({h.daysAgo}d)
                               </span>
                             )}
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                            <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-medium bg-[#0a1217] text-white">
                               <Check className="w-3 h-3" />
                               <span>Attending ({h.rsvpPartySize || h.expectedPartySize})</span>
                             </span>
@@ -542,7 +539,7 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
                               type="button"
                               onClick={() => handleResetRsvp(h.id)}
                               disabled={resettingId === h.id}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 transition-colors disabled:opacity-50"
+                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-[#0a1217] border border-[#0a1217]/20 hover:border-[#0a1217] transition-colors disabled:opacity-50"
                               title="Reset RSVP to uninvite or modify"
                             >
                               {resettingId === h.id ? (
@@ -557,13 +554,13 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
                           <div className="inline-flex items-center justify-end gap-1.5 flex-wrap">
                             {h.isStale && (
                               <span
-                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-900 border border-amber-300"
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#0a1217] border border-[#0a1217]/20"
                                 title={`RSVP submitted ${h.daysAgo} days ago without updates`}
                               >
-                                ⚠️ Stale ({h.daysAgo}d)
+                                Stale ({h.daysAgo}d)
                               </span>
                             )}
-                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                            <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-medium bg-[#e4eff7] border border-[#0a1217] text-[#0a1217]">
                               <HelpCircle className="w-3 h-3" />
                               <span>Maybe</span>
                             </span>
@@ -571,7 +568,7 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
                               type="button"
                               onClick={() => handleResetRsvp(h.id)}
                               disabled={resettingId === h.id}
-                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold text-slate-500 hover:text-rose-600 hover:bg-rose-50 border border-slate-200 transition-colors disabled:opacity-50"
+                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium text-[#0a1217] border border-[#0a1217]/20 hover:border-[#0a1217] transition-colors disabled:opacity-50"
                               title="Reset RSVP to uninvite or modify"
                             >
                               {resettingId === h.id ? (
@@ -583,16 +580,16 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
                             </button>
                           </div>
                         ) : h.rsvpStatus === 'no' ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-100 text-rose-800 border border-rose-200">
+                          <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-medium bg-[#85898b]/20 text-[#0a1217]">
                             <X className="w-3 h-3" />
                             <span>Declined</span>
                           </span>
                         ) : isInvited ? (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-600">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#e4eff7] text-[#0a1217]">
                             No Reply Yet
                           </span>
                         ) : (
-                          <span className="text-[10px] text-slate-300 font-medium italic">
+                          <span className="text-xs text-[#85898b]">
                             Not Invited
                           </span>
                         )}
@@ -606,26 +603,26 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
         )}
 
         {/* Footer / Save Bar */}
-        <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+        <div className="pt-4 border-t border-[#0a1217]/10 flex items-center justify-between">
           <div>
             {hasChanges ? (
-              <span className="text-xs font-semibold text-rose-600 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-rose-600 animate-pulse" />
+              <span className="text-xs font-medium text-[#0a1217] flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#0a1217] animate-ping" />
                 Unsaved changes: {toAdd.length > 0 && `+${toAdd.length} to invite`}{' '}
                 {toRemove.length > 0 && `-${toRemove.length} to uninvite`}
               </span>
             ) : (
-              <span className="text-xs text-slate-400">All invitation assignments saved.</span>
+              <span className="text-xs text-[#85898b]">All invitation assignments saved.</span>
             )}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             {hasChanges && (
               <button
                 type="button"
                 onClick={handleReset}
                 disabled={isSaving}
-                className="px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 flex items-center gap-1.5 transition-colors disabled:opacity-50"
+                className="px-4 py-2 rounded-full text-xs font-medium text-[#0a1217] border border-[#0a1217]/20 hover:border-[#0a1217] flex items-center gap-1.5 transition-colors disabled:opacity-50"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Revert</span>
@@ -636,7 +633,7 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
               type="button"
               onClick={onClose}
               disabled={isSaving}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors disabled:opacity-50"
+              className="px-5 py-2.5 rounded-full text-xs font-medium text-[#0a1217] border border-[#0a1217]/20 hover:border-[#0a1217] transition-colors disabled:opacity-50"
             >
               Close
             </button>
@@ -645,7 +642,7 @@ export const FunctionInvitationsModal: React.FC<FunctionInvitationsModalProps> =
               type="button"
               onClick={handleSave}
               disabled={isSaving || !hasChanges}
-              className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-2 disabled:opacity-40"
+              className="px-6 py-2.5 rounded-full bg-[#0a1217] hover:bg-[#0a1217]/90 text-white text-xs font-medium transition-all flex items-center gap-2 disabled:opacity-40"
             >
               {isSaving ? (
                 <>

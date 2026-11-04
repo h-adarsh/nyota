@@ -395,16 +395,16 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
   if (functions.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center max-w-lg mx-auto">
-        <Calendar className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-        <h3 className="text-base font-bold text-slate-800">No Wedding Functions Configured</h3>
-        <p className="text-xs text-slate-500 mt-1 mb-5">
-          Venue check-in requires at least one wedding function to record arrivals.
+      <div className="bg-[#e4eff7] rounded-[24px] border border-[#0a1217]/10 p-8 text-center max-w-lg mx-auto">
+        <Calendar className="w-12 h-12 text-[#85898b] mx-auto mb-3" />
+        <h3 className="font-serif text-2xl font-normal text-[#0a1217]">No Functions Configured</h3>
+        <p className="text-xs text-[#85898b] mt-1 mb-6">
+          Venue check-in requires at least one event function to record arrivals.
         </p>
         {onNavigateToFunctions && (
           <button
             onClick={onNavigateToFunctions}
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-all shadow-sm"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#0a1217] text-white text-xs font-medium transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Create Function</span>
@@ -428,14 +428,14 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         {/* Function Dropdown */}
         <div className="flex-1 max-w-md">
-          <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#85898b] mb-1.5">
             Active Function Venue
           </label>
           <div className="relative">
             <select
               value={selectedFunctionId}
               onChange={(e) => setSelectedFunctionId(e.target.value)}
-              className="w-full appearance-none bg-white border border-slate-200 text-slate-900 font-bold text-sm sm:text-base rounded-2xl px-4 py-3 pr-10 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 shadow-sm"
+              className="w-full appearance-none bg-white border border-[#000000] text-[#0a1217] font-medium text-sm sm:text-base rounded-[24px] px-4 py-3 pr-10 focus:outline-none cursor-pointer"
             >
               {functions.map((fn) => (
                 <option key={fn.id} value={fn.id}>
@@ -443,11 +443,11 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                 </option>
               ))}
             </select>
-            <SlidersHorizontal className="w-4 h-4 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+            <SlidersHorizontal className="w-4 h-4 text-[#85898b] absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
           </div>
           {selectedFunction?.venue && (
-            <p className="text-xs text-slate-500 mt-1.5 flex items-center gap-1">
-              <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+            <p className="text-xs text-[#85898b] mt-1.5 flex items-center gap-1.5">
+              <MapPin className="w-3.5 h-3.5 text-[#85898b] shrink-0" />
               <span>{selectedFunction.venue}</span>
             </p>
           )}
@@ -458,17 +458,17 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
           <button
             onClick={() => loadOverview(selectedFunctionId)}
             disabled={isLoading}
-            className="p-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-600 font-bold text-xs shadow-sm transition-all min-h-[48px] min-w-[48px] flex items-center justify-center"
+            className="p-3 rounded-full border border-[#0a1217]/20 bg-white hover:bg-[#e4eff7] text-[#0a1217] font-medium text-xs transition-all min-h-[48px] min-w-[48px] flex items-center justify-center cursor-pointer"
             title="Refresh check-in overview"
           >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-rose-600' : 'text-slate-500'}`} />
+            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin text-[#0a1217]' : 'text-[#85898b]'}`} />
           </button>
 
           <button
             onClick={openWalkinModal}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/15 transition-all min-h-[48px]"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#0a1217] hover:opacity-90 text-white font-medium text-xs sm:text-sm transition-all min-h-[48px] cursor-pointer"
           >
-            <UserPlus className="w-4 h-4" />
+            <UserPlus className="w-4 h-4 text-[#cdfe00]" />
             <span>+ Add Walk-In Guest</span>
           </button>
         </div>
@@ -476,14 +476,14 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
       {/* Notifications */}
       {errorMessage && (
-        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-4 flex items-start gap-3 text-rose-800 text-xs sm:text-sm animate-in fade-in">
-          <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+        <div className="bg-[#e4eff7] border border-[#0a1217]/10 rounded-[24px] p-4 flex items-start gap-3 text-[#0a1217] text-xs sm:text-sm animate-in fade-in">
+          <AlertCircle className="w-4 h-4 text-[#0a1217] shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="font-semibold">{errorMessage}</p>
+            <p className="font-medium">{errorMessage}</p>
           </div>
           <button
             onClick={() => setErrorMessage(null)}
-            className="text-rose-400 hover:text-rose-600"
+            className="text-[#85898b] hover:text-[#0a1217] cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -491,35 +491,35 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
       )}
 
       {successBanner && (
-        <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3 text-emerald-800 text-xs sm:text-sm animate-in fade-in">
-          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
-          <p className="font-semibold flex-1">{successBanner}</p>
+        <div className="bg-[#e4eff7] border border-[#0a1217]/10 rounded-[24px] p-4 flex items-center gap-3 text-[#0a1217] text-xs sm:text-sm animate-in fade-in">
+          <CheckCircle2 className="w-4 h-4 text-[#0a1217] shrink-0" />
+          <p className="font-medium flex-1">{successBanner}</p>
         </div>
       )}
 
-      {/* Attendance Summary Dashboard Hero */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-5 sm:p-6 shadow-sm space-y-5">
+      {/* Attendance Summary Dashboard Hero (Sana Dark Card with Electric Lime Accent) */}
+      <div className="bg-[#0a1217] text-white rounded-[24px] border border-[#0a1217] p-6 sm:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-rose-600">
-              Live Attendance Tally
+            <span className="text-[11px] font-medium uppercase tracking-wider text-[#cdfe00]">
+              Live Attendance
             </span>
-            <h3 className="text-lg sm:text-xl font-extrabold text-slate-900">
-              Gate Check-In Dashboard
+            <h3 className="text-xl sm:text-2xl font-medium text-white tracking-tight mt-0.5">
+              Venue Check-In
             </h3>
           </div>
           <div className="text-right">
-            <span className="text-2xl sm:text-3xl font-black text-emerald-600">
+            <span className="text-3xl sm:text-4xl font-medium text-[#cdfe00] tabular-nums">
               {progressPercent}%
             </span>
-            <p className="text-[11px] text-slate-400 font-medium">Arrival Rate</p>
+            <p className="text-[11px] text-[#85898b] font-normal">Arrival Rate</p>
           </div>
         </div>
 
-        {/* Visual Progress Bar */}
-        <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+        {/* Visual Progress Bar in Electric Lime */}
+        <div className="w-full bg-white/20 rounded-full h-2.5 overflow-hidden">
           <div
-            className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+            className="bg-[#cdfe00] h-full rounded-full transition-all duration-500"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -527,64 +527,64 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
         {/* KPI Metric Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pt-1">
           {/* 1. Arrived Guests */}
-          <div className="bg-emerald-50/70 border border-emerald-100 rounded-2xl p-3.5 sm:p-4">
-            <div className="flex items-center gap-1.5 text-emerald-800 text-xs font-semibold mb-1">
-              <UserCheck className="w-4 h-4 text-emerald-600" />
-              <span>Arrived Guests</span>
+          <div className="bg-white/5 border border-white/10 rounded-[24px] p-4">
+            <div className="flex items-center gap-1.5 text-[#cdfe00] text-xs font-medium mb-1">
+              <UserCheck className="w-3.5 h-3.5" />
+              <span>Arrived</span>
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-emerald-950">
+              <span className="text-2xl font-medium text-white tabular-nums">
                 {summary?.totalCheckedInGuests ?? 0}
               </span>
-              <span className="text-xs text-emerald-700 font-medium">
-                / {summary?.confirmedHeadcount ?? 0} confirmed
+              <span className="text-xs text-[#85898b]">
+                / {summary?.confirmedHeadcount ?? 0}
               </span>
             </div>
           </div>
 
           {/* 2. Households Arrived */}
-          <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 sm:p-4">
-            <div className="flex items-center gap-1.5 text-slate-700 text-xs font-semibold mb-1">
-              <Users className="w-4 h-4 text-slate-500" />
+          <div className="bg-white/5 border border-white/10 rounded-[24px] p-4">
+            <div className="flex items-center gap-1.5 text-white text-xs font-medium mb-1">
+              <Users className="w-3.5 h-3.5 text-[#85898b]" />
               <span>Households</span>
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-900">
+              <span className="text-2xl font-medium text-white tabular-nums">
                 {summary?.totalCheckedInHouseholds ?? 0}
               </span>
-              <span className="text-xs text-slate-500 font-medium">
-                / {overview?.invitedHouseholds.length ?? 0} invited
+              <span className="text-xs text-[#85898b]">
+                / {overview?.invitedHouseholds.length ?? 0}
               </span>
             </div>
           </div>
 
           {/* 3. Walk-Ins Recorded */}
-          <div className="bg-amber-50/70 border border-amber-100 rounded-2xl p-3.5 sm:p-4">
-            <div className="flex items-center gap-1.5 text-amber-800 text-xs font-semibold mb-1">
-              <Sparkles className="w-4 h-4 text-amber-600" />
+          <div className="bg-white/5 border border-white/10 rounded-[24px] p-4">
+            <div className="flex items-center gap-1.5 text-white text-xs font-medium mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-[#cdfe00]" />
               <span>Walk-Ins</span>
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-amber-950">
+              <span className="text-2xl font-medium text-white tabular-nums">
                 {summary?.walkinGuests ?? 0}
               </span>
-              <span className="text-xs text-amber-700 font-medium">
-                across {summary?.walkinCount ?? 0} groups
+              <span className="text-xs text-[#85898b]">
+                ({summary?.walkinCount ?? 0} groups)
               </span>
             </div>
           </div>
 
           {/* 4. Pending Expected */}
-          <div className="bg-rose-50/60 border border-rose-100 rounded-2xl p-3.5 sm:p-4">
-            <div className="flex items-center gap-1.5 text-rose-800 text-xs font-semibold mb-1">
-              <Clock className="w-4 h-4 text-rose-600" />
-              <span>Pending Arrival</span>
+          <div className="bg-white/5 border border-white/10 rounded-[24px] p-4">
+            <div className="flex items-center gap-1.5 text-white text-xs font-medium mb-1">
+              <Clock className="w-3.5 h-3.5 text-[#85898b]" />
+              <span>Pending</span>
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-rose-950">
+              <span className="text-2xl font-medium text-white tabular-nums">
                 {tabCounts.pending}
               </span>
-              <span className="text-xs text-rose-700 font-medium">households</span>
+              <span className="text-xs text-[#85898b]">households</span>
             </div>
           </div>
         </div>
@@ -592,20 +592,20 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
       {/* Fast Name Search & Filter Chips Bar */}
       <div className="space-y-3">
-        {/* Large Touch Search Input */}
+        {/* Large Touch Search Input (24px radius, Obsidian outline) */}
         <div className="relative">
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search guest by household name, contact, or phone..."
-            className="w-full bg-white border border-slate-200 text-slate-900 placeholder-slate-400 text-sm sm:text-base rounded-2xl pl-12 pr-10 py-3.5 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 shadow-sm min-h-[48px]"
+            className="w-full bg-white border border-[#000000] text-[#0a1217] placeholder-[#85898b] text-sm sm:text-base rounded-[24px] pl-12 pr-10 py-3.5 focus:outline-none min-h-[48px]"
           />
-          <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+          <Search className="w-4 h-4 text-[#85898b] absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-600"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1 text-[#85898b] hover:text-[#0a1217] cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -616,10 +616,10 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
         <div className="flex items-center gap-2 overflow-x-auto scrollbar-none pb-1">
           <button
             onClick={() => setActiveFilter('all')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all min-h-[38px] ${
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all min-h-[38px] cursor-pointer ${
               activeFilter === 'all'
-                ? 'bg-slate-900 text-white shadow-sm'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#0a1217] text-white'
+                : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
             }`}
           >
             All Guests ({tabCounts.total})
@@ -627,10 +627,10 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
           <button
             onClick={() => setActiveFilter('pending')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all min-h-[38px] ${
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all min-h-[38px] cursor-pointer ${
               activeFilter === 'pending'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#0a1217] text-white'
+                : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
             }`}
           >
             Pending Arrival ({tabCounts.pending})
@@ -638,10 +638,10 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
           <button
             onClick={() => setActiveFilter('arrived')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all min-h-[38px] ${
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all min-h-[38px] cursor-pointer ${
               activeFilter === 'arrived'
-                ? 'bg-emerald-600 text-white shadow-sm'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#0a1217] text-white'
+                : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
             }`}
           >
             Checked In ({tabCounts.arrived})
@@ -649,10 +649,10 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
           <button
             onClick={() => setActiveFilter('walkin')}
-            className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold whitespace-nowrap transition-all min-h-[38px] ${
+            className={`px-4 py-2 rounded-full text-xs sm:text-sm font-medium whitespace-nowrap transition-all min-h-[38px] cursor-pointer ${
               activeFilter === 'walkin'
-                ? 'bg-amber-600 text-white shadow-sm'
-                : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                ? 'bg-[#0a1217] text-white'
+                : 'bg-[#e4eff7] text-[#0a1217] hover:bg-[#d5e5f0]'
             }`}
           >
             Walk-ins ({tabCounts.walkin})
@@ -663,15 +663,15 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
       {/* Guest Check-In Cards List */}
       <div className="space-y-3">
         {isLoading && !overview ? (
-          <div className="py-16 text-center text-slate-400">
-            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-rose-600" />
-            <p className="text-xs font-semibold">Loading venue check-in list...</p>
+          <div className="py-16 text-center text-[#85898b]">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-2 text-[#0a1217]" />
+            <p className="text-xs font-medium">Loading venue check-in list...</p>
           </div>
         ) : filteredList.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-            <Users className="w-10 h-10 text-slate-300 mx-auto mb-2" />
-            <h4 className="text-sm font-bold text-slate-800">No Guests Found</h4>
-            <p className="text-xs text-slate-500 mt-1">
+          <div className="bg-white rounded-[24px] border border-[#0a1217]/10 p-8 text-center">
+            <Users className="w-8 h-8 text-[#85898b] mx-auto mb-2" />
+            <h4 className="text-sm font-medium text-[#0a1217]">No Guests Found</h4>
+            <p className="text-xs text-[#85898b] mt-1">
               {searchQuery
                 ? `No guests matched "${searchQuery}".`
                 : 'No guests match the selected filter.'}
@@ -691,23 +691,23 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
             return (
               <div
                 key={`${item.type}-${item.id}`}
-                className={`rounded-2xl border transition-all p-4 sm:p-5 ${
+                className={`rounded-[24px] border transition-all p-4 sm:p-5 ${
                   isCheckedIn
-                    ? 'bg-emerald-50/40 border-emerald-200'
-                    : 'bg-white border-slate-200 hover:border-slate-300 shadow-sm'
+                    ? 'bg-[#e4eff7]/60 border-[#0a1217]/15'
+                    : 'bg-white border-[#0a1217]/10 hover:border-[#0a1217]/25'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   {/* Left: Guest Details & Status Badges */}
                   <div className="space-y-1.5 flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h4 className="font-extrabold text-slate-900 text-base tracking-tight truncate">
+                      <h4 className="font-medium text-[#0a1217] text-base tracking-tight truncate">
                         {item.name}
                       </h4>
 
                       {/* Walkin Tag */}
                       {item.type === 'walkin' && (
-                        <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-200">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#0a1217] border border-[#0a1217]/10">
                           Walk-in
                         </span>
                       )}
@@ -716,20 +716,20 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                       {item.type === 'invited' && (
                         <>
                           {item.rsvpStatus === 'yes' ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-100 text-emerald-800">
-                              RSVP Attending ({item.rsvpPartySize || item.expectedPartySize})
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#0a1217]">
+                              Attending ({item.rsvpPartySize || item.expectedPartySize})
                             </span>
                           ) : item.rsvpStatus === 'maybe' ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800">
-                              RSVP Maybe ({item.rsvpPartySize || item.expectedPartySize})
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#0a1217]">
+                              Maybe ({item.rsvpPartySize || item.expectedPartySize})
                             </span>
                           ) : item.rsvpStatus === 'no' ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600">
-                              RSVP Declined
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-white text-[#85898b] border border-[#0a1217]/10">
+                              Declined
                             </span>
                           ) : (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-semibold bg-rose-50 text-rose-700">
-                              RSVP Pending
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#85898b]">
+                              Pending
                             </span>
                           )}
                         </>
@@ -737,41 +737,41 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
                       {/* Checked In Tag */}
                       {isCheckedIn && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-600 text-white shadow-xs">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>Checked In ({item.actualPartySize} arrived)</span>
+                        <span className="inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-[11px] font-medium bg-[#0a1217] text-white">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#cdfe00]" />
+                          <span>Checked In ({item.actualPartySize})</span>
                         </span>
                       )}
 
                       {/* Offline/Failed Arrival Warning Badge */}
                       {!isCheckedIn && failedCheckins[item.id] && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse">
-                          <AlertCircle className="w-3 h-3 text-amber-600" />
-                          <span>Failed to save • Tap to retry</span>
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-[#e4eff7] text-[#0a1217] border border-[#0a1217]">
+                          <AlertCircle className="w-3 h-3 text-[#0a1217]" />
+                          <span>Tap to retry</span>
                         </span>
                       )}
                     </div>
 
                     {/* Contact & Meta Subtext */}
-                    <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
+                    <div className="flex items-center gap-3 text-xs text-[#85898b] flex-wrap">
                       {item.contact && item.contact !== item.name && (
-                        <span>Contact: <strong className="text-slate-700">{item.contact}</strong></span>
+                        <span>Contact: <strong className="text-[#0a1217] font-medium">{item.contact}</strong></span>
                       )}
                       {item.phone && (
                         <a
                           href={`tel:${item.phone}`}
-                          className="flex items-center gap-1 text-slate-600 hover:text-rose-600"
+                          className="flex items-center gap-1 text-[#0a1217] hover:underline"
                         >
-                          <Phone className="w-3 h-3 text-slate-400" />
+                          <Phone className="w-3 h-3 text-[#85898b]" />
                           <span>{item.phone}</span>
                         </a>
                       )}
                       <span>
-                        Expected: <strong className="text-slate-700">{item.expectedPartySize} guests</strong>
+                        Expected: <strong className="text-[#0a1217] font-medium">{item.expectedPartySize} guests</strong>
                       </span>
                       {isCheckedIn && item.checkedInAt && (
-                        <span className="flex items-center gap-1 text-emerald-700 font-medium">
-                          <Clock className="w-3 h-3" />
+                        <span className="flex items-center gap-1 text-[#0a1217]">
+                          <Clock className="w-3 h-3 text-[#85898b]" />
                           <span>Arrived at {formatTime(item.checkedInAt)}</span>
                         </span>
                       )}
@@ -779,14 +779,14 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
                     {/* Notes preview if any */}
                     {item.notes && (
-                      <p className="text-xs text-slate-500 bg-slate-50 rounded-lg px-2.5 py-1 border border-slate-100 flex items-center gap-1.5 mt-1 max-w-xl truncate">
-                        <FileText className="w-3 h-3 text-slate-400 shrink-0" />
+                      <p className="text-xs text-[#85898b] bg-[#e4eff7] rounded-[24px] px-3 py-1 border border-[#0a1217]/5 flex items-center gap-1.5 mt-1 max-w-xl truncate">
+                        <FileText className="w-3 h-3 text-[#85898b] shrink-0" />
                         <span className="truncate">{item.notes}</span>
                       </p>
                     )}
                   </div>
 
-                  {/* Right: Touch Actions (≥48px min height) */}
+                  {/* Right: Touch Actions (≥48px min height, Sana Pill Buttons) */}
                   <div className="flex items-center gap-2 pt-2 sm:pt-0 shrink-0">
                     {!isCheckedIn ? (
                       /* Not Checked In: Fast 1-Tap & Adjust Buttons */
@@ -794,22 +794,16 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                         <button
                           onClick={() => handleDirectCheckin(item)}
                           disabled={isActing}
-                          className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm shadow-sm transition-all min-h-[48px] disabled:opacity-50 ${
-                            failedCheckins[item.id]
-                              ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-amber-600/20'
-                              : 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                          }`}
+                          className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 px-5 py-2.5 rounded-full font-medium text-xs sm:text-sm bg-[#0a1217] hover:opacity-90 text-white min-h-[48px] disabled:opacity-50 cursor-pointer transition-all"
                         >
                           {isActing ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : failedCheckins[item.id] ? (
-                            <RotateCcw className="w-4 h-4" />
+                            <Loader2 className="w-4 h-4 animate-spin text-white" />
                           ) : (
-                            <CheckCircle2 className="w-4 h-4" />
+                            <CheckCircle2 className="w-4 h-4 text-[#cdfe00]" />
                           )}
                           <span>
                             {failedCheckins[item.id]
-                              ? `Retry Check In (${directPartySize})`
+                              ? `Retry (${directPartySize})`
                               : `Check In (${directPartySize})`}
                           </span>
                         </button>
@@ -817,9 +811,9 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                         <button
                           onClick={() => openAdjustModal(item)}
                           title="Adjust headcount or add arrival notes"
-                          className="px-3.5 py-2.5 rounded-xl border border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50 font-bold text-xs sm:text-sm transition-colors min-h-[48px] flex items-center justify-center gap-1"
+                          className="px-4 py-2.5 rounded-full border border-[#0a1217]/20 text-[#0a1217] hover:bg-[#e4eff7] font-medium text-xs sm:text-sm transition-colors min-h-[48px] flex items-center justify-center gap-1 cursor-pointer"
                         >
-                          <SlidersHorizontal className="w-4 h-4 text-slate-500" />
+                          <SlidersHorizontal className="w-3.5 h-3.5 text-[#85898b]" />
                           <span>Adjust</span>
                         </button>
                       </>
@@ -828,9 +822,9 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                       <>
                         <button
                           onClick={() => openAdjustModal(item)}
-                          className="px-3.5 py-2.5 rounded-xl border border-emerald-300 text-emerald-800 hover:bg-emerald-100/60 font-bold text-xs sm:text-sm transition-colors min-h-[48px] flex items-center justify-center gap-1.5"
+                          className="px-4 py-2.5 rounded-full border border-[#0a1217]/20 text-[#0a1217] hover:bg-white font-medium text-xs sm:text-sm transition-colors min-h-[48px] flex items-center justify-center gap-1.5 cursor-pointer"
                         >
-                          <SlidersHorizontal className="w-4 h-4 text-emerald-600" />
+                          <SlidersHorizontal className="w-3.5 h-3.5 text-[#0a1217]" />
                           <span>Edit Count</span>
                         </button>
 
@@ -842,10 +836,10 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                             })
                           }
                           title="Undo check-in for this guest"
-                          className="px-3 py-2.5 rounded-xl text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors min-h-[48px] flex items-center justify-center"
+                          className="px-3.5 py-2.5 rounded-full text-[#85898b] hover:text-[#0a1217] hover:bg-white transition-colors min-h-[48px] flex items-center justify-center cursor-pointer"
                         >
-                          <RotateCcw className="w-4 h-4" />
-                          <span className="text-xs font-semibold ml-1 hidden sm:inline">Undo</span>
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span className="text-xs font-medium ml-1 hidden sm:inline">Undo</span>
                         </button>
                       </>
                     )}
@@ -859,31 +853,31 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
       {/* Adjust Party Size & Notes Modal */}
       {adjustModalData && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-[#0a1217]/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-[24px] max-w-md w-full p-6 sm:p-8 border border-[#000000] space-y-5 animate-in fade-in">
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-rose-600">
-                  {adjustModalData.isAlreadyCheckedIn ? 'Edit Arrival' : 'Venue Gate Check-In'}
+                <span className="text-[11px] font-medium uppercase tracking-wider text-[#85898b]">
+                  {adjustModalData.isAlreadyCheckedIn ? 'Edit Arrival' : 'Venue Check-In'}
                 </span>
-                <h3 className="text-xl font-black text-slate-900 mt-0.5">
+                <h3 className="text-xl font-medium text-[#0a1217] mt-0.5">
                   {adjustModalData.name}
                 </h3>
                 {adjustModalData.contactName && (
-                  <p className="text-xs text-slate-500">Contact: {adjustModalData.contactName}</p>
+                  <p className="text-xs text-[#85898b]">Contact: {adjustModalData.contactName}</p>
                 )}
               </div>
               <button
                 onClick={() => setAdjustModalData(null)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-[#85898b] hover:text-[#0a1217] p-1 rounded-full cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Stepper Input (party size) */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
-              <label className="block text-xs font-bold text-slate-700">
+            <div className="bg-[#e4eff7] rounded-[24px] p-5 border border-[#0a1217]/10 space-y-3">
+              <label className="block text-xs font-medium text-[#0a1217]">
                 Actual Arrived Headcount:
               </label>
 
@@ -901,16 +895,16 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                     )
                   }
                   disabled={adjustModalData.currentPartySize <= 1}
-                  className="w-14 h-14 rounded-2xl bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-black text-xl flex items-center justify-center shadow-xs transition-all active:scale-95 disabled:opacity-40 min-h-[48px] min-w-[48px]"
+                  className="w-12 h-12 rounded-full bg-white border border-[#000000] text-[#0a1217] font-medium text-lg flex items-center justify-center transition-all cursor-pointer disabled:opacity-40 min-h-[48px] min-w-[48px]"
                 >
-                  <Minus className="w-6 h-6 text-slate-700" />
+                  <Minus className="w-5 h-5" />
                 </button>
 
                 <div className="w-24 text-center">
-                  <span className="text-4xl font-black text-slate-950">
+                  <span className="text-4xl font-medium text-[#0a1217] tabular-nums">
                     {adjustModalData.currentPartySize}
                   </span>
-                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <p className="text-[11px] font-medium text-[#85898b] uppercase tracking-wider">
                     {adjustModalData.currentPartySize === 1 ? 'Guest' : 'Guests'}
                   </p>
                 </div>
@@ -927,9 +921,9 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                         : null
                     )
                   }
-                  className="w-14 h-14 rounded-2xl bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-black text-xl flex items-center justify-center shadow-xs transition-all active:scale-95 min-h-[48px] min-w-[48px]"
+                  className="w-12 h-12 rounded-full bg-white border border-[#000000] text-[#0a1217] font-medium text-lg flex items-center justify-center transition-all cursor-pointer min-h-[48px] min-w-[48px]"
                 >
-                  <Plus className="w-6 h-6 text-slate-700" />
+                  <Plus className="w-5 h-5" />
                 </button>
               </div>
 
@@ -949,7 +943,7 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                             : null
                         )
                       }
-                      className="text-xs text-rose-600 hover:text-rose-700 font-bold underline"
+                      className="text-xs text-[#0a1217] hover:underline font-medium cursor-pointer"
                     >
                       Reset to expected headcount ({adjustModalData.expectedPartySize})
                     </button>
@@ -959,7 +953,7 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
             {/* Optional Arrival Notes */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700">
+              <label className="block text-xs font-medium text-[#0a1217]">
                 Gate Notes (Optional):
               </label>
               <textarea
@@ -970,9 +964,9 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                   )
                 }
                 maxLength={500}
-                placeholder="e.g. Arrived late, extra driver seated outside, special seating request..."
+                placeholder="e.g. Arrived late, special seating request..."
                 rows={2}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-xs rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                className="w-full bg-white border border-[#000000] text-[#0a1217] placeholder-[#85898b] text-xs rounded-[24px] p-3.5 focus:outline-none"
               />
             </div>
 
@@ -981,7 +975,7 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
               <button
                 type="button"
                 onClick={() => setAdjustModalData(null)}
-                className="flex-1 py-3 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 transition-colors min-h-[48px]"
+                className="flex-1 py-3 px-4 rounded-full border border-[#0a1217]/20 text-[#0a1217] font-medium text-xs sm:text-sm hover:bg-[#e4eff7] transition-colors min-h-[48px] cursor-pointer"
               >
                 Cancel
               </button>
@@ -990,12 +984,12 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                 type="button"
                 onClick={handleSaveAdjustModal}
                 disabled={isLoading}
-                className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-600/15 transition-all min-h-[48px] flex items-center justify-center gap-2"
+                className="flex-1 py-3 px-4 rounded-full bg-[#0a1217] hover:opacity-90 text-white font-medium text-xs sm:text-sm transition-all min-h-[48px] flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <CheckCircle2 className="w-4 h-4" />
+                  <CheckCircle2 className="w-4 h-4 text-[#cdfe00]" />
                 )}
                 <span>
                   {adjustModalData.isAlreadyCheckedIn ? 'Update Check-In' : 'Confirm Check-In'}
@@ -1008,24 +1002,24 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
       {/* Add Walk-in Guest Modal */}
       {isWalkinModalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 bg-[#0a1217]/50 backdrop-blur-sm flex items-center justify-center p-4">
           <form
             onSubmit={handleSaveWalkin}
-            className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 space-y-5 animate-in fade-in zoom-in-95"
+            className="bg-white rounded-[24px] max-w-md w-full p-6 sm:p-8 border border-[#000000] space-y-5 animate-in fade-in"
           >
             <div className="flex items-start justify-between">
               <div>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600">
+                <span className="text-[11px] font-medium uppercase tracking-wider text-[#85898b]">
                   Unregistered Arrival
                 </span>
-                <h3 className="text-xl font-black text-slate-900 mt-0.5">
+                <h3 className="text-xl font-medium text-[#0a1217] mt-0.5">
                   Record Walk-In Guest
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setIsWalkinModalOpen(false)}
-                className="text-slate-400 hover:text-slate-600 p-1"
+                className="text-[#85898b] hover:text-[#0a1217] p-1 rounded-full cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1033,8 +1027,8 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
             {/* Guest / Group Name */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700">
-                Guest or Group Name: <span className="text-rose-500">*</span>
+              <label className="block text-xs font-medium text-[#0a1217]">
+                Guest or Group Name:
               </label>
               <input
                 type="text"
@@ -1042,14 +1036,14 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                 maxLength={150}
                 value={walkinName}
                 onChange={(e) => setWalkinName(e.target.value)}
-                placeholder="e.g. Ramesh Uncle & Family, Dr. Roy (VIP Walk-in)"
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 min-h-[48px]"
+                placeholder="e.g. Ramesh Uncle & Family"
+                className="w-full bg-white border border-[#000000] text-[#0a1217] text-sm rounded-[24px] px-4 py-3 focus:outline-none min-h-[48px]"
               />
             </div>
 
             {/* Party Size Stepper */}
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
-              <label className="block text-xs font-bold text-slate-700">
+            <div className="bg-[#e4eff7] rounded-[24px] p-5 border border-[#0a1217]/10 space-y-3">
+              <label className="block text-xs font-medium text-[#0a1217]">
                 Number of Arriving Guests:
               </label>
 
@@ -1058,16 +1052,16 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                   type="button"
                   onClick={() => setWalkinPartySize((prev) => Math.max(1, prev - 1))}
                   disabled={walkinPartySize <= 1}
-                  className="w-14 h-14 rounded-2xl bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-black text-xl flex items-center justify-center shadow-xs transition-all active:scale-95 disabled:opacity-40 min-h-[48px] min-w-[48px]"
+                  className="w-12 h-12 rounded-full bg-white border border-[#000000] text-[#0a1217] font-medium text-lg flex items-center justify-center transition-all cursor-pointer disabled:opacity-40 min-h-[48px] min-w-[48px]"
                 >
-                  <Minus className="w-6 h-6 text-slate-700" />
+                  <Minus className="w-5 h-5" />
                 </button>
 
                 <div className="w-24 text-center">
-                  <span className="text-4xl font-black text-slate-950">
+                  <span className="text-4xl font-medium text-[#0a1217] tabular-nums">
                     {walkinPartySize}
                   </span>
-                  <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                  <p className="text-[11px] font-medium text-[#85898b] uppercase tracking-wider">
                     {walkinPartySize === 1 ? 'Guest' : 'Guests'}
                   </p>
                 </div>
@@ -1075,25 +1069,25 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                 <button
                   type="button"
                   onClick={() => setWalkinPartySize((prev) => Math.min(50, prev + 1))}
-                  className="w-14 h-14 rounded-2xl bg-white border border-slate-300 hover:border-slate-400 text-slate-800 font-black text-xl flex items-center justify-center shadow-xs transition-all active:scale-95 min-h-[48px] min-w-[48px]"
+                  className="w-12 h-12 rounded-full bg-white border border-[#000000] text-[#0a1217] font-medium text-lg flex items-center justify-center transition-all cursor-pointer min-h-[48px] min-w-[48px]"
                 >
-                  <Plus className="w-6 h-6 text-slate-700" />
+                  <Plus className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
             {/* Walk-in Notes */}
             <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-slate-700">
+              <label className="block text-xs font-medium text-[#0a1217]">
                 Notes (Optional):
               </label>
               <textarea
                 value={walkinNotes}
                 onChange={(e) => setWalkinNotes(e.target.value)}
                 maxLength={500}
-                placeholder="e.g. Accompanied groom's college friends..."
+                placeholder="e.g. Accompanied groom's friends..."
                 rows={2}
-                className="w-full bg-slate-50 border border-slate-200 text-slate-800 placeholder-slate-400 text-xs rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500"
+                className="w-full bg-white border border-[#000000] text-[#0a1217] placeholder-[#85898b] text-xs rounded-[24px] p-3.5 focus:outline-none"
               />
             </div>
 
@@ -1102,7 +1096,7 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
               <button
                 type="button"
                 onClick={() => setIsWalkinModalOpen(false)}
-                className="flex-1 py-3 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs sm:text-sm hover:bg-slate-50 transition-colors min-h-[48px]"
+                className="flex-1 py-3 px-4 rounded-full border border-[#0a1217]/20 text-[#0a1217] font-medium text-xs sm:text-sm hover:bg-[#e4eff7] transition-colors min-h-[48px] cursor-pointer"
               >
                 Cancel
               </button>
@@ -1110,12 +1104,12 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
               <button
                 type="submit"
                 disabled={isLoading || !walkinName.trim()}
-                className="flex-1 py-3 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-amber-600/15 transition-all min-h-[48px] flex items-center justify-center gap-2 disabled:opacity-50"
+                className="flex-1 py-3 px-4 rounded-full bg-[#0a1217] hover:opacity-90 text-white font-medium text-xs sm:text-sm transition-all min-h-[48px] flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {isLoading ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
-                  <UserPlus className="w-4 h-4" />
+                  <UserPlus className="w-4 h-4 text-[#cdfe00]" />
                 )}
                 <span>Record Walk-In</span>
               </button>
@@ -1126,28 +1120,22 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
 
       {/* Undo Check-In Confirmation Dialog */}
       {undoTarget && (
-        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 space-y-4 animate-in fade-in zoom-in-95 text-center">
-            <div className="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center mx-auto">
-              <RotateCcw className="w-6 h-6" />
-            </div>
-
+        <div className="fixed inset-0 z-50 bg-[#0a1217]/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-[24px] max-w-sm w-full p-6 sm:p-8 border border-[#000000] space-y-4 animate-in fade-in text-center">
             <div>
-              <h4 className="text-base font-extrabold text-slate-900">
+              <h4 className="text-base font-medium text-[#0a1217]">
                 Undo Check-In?
               </h4>
-              <p className="text-xs text-slate-500 mt-1">
-                Are you sure you want to revert check-in for{' '}
-                <strong className="text-slate-700">{undoTarget.name}</strong>?
-                Their status will return to pending.
+              <p className="text-xs text-[#85898b] mt-1.5">
+                Revert check-in for <strong className="text-[#0a1217]">{undoTarget.name}</strong>? Their status will return to pending.
               </p>
             </div>
 
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-3 pt-3">
               <button
                 type="button"
                 onClick={() => setUndoTarget(null)}
-                className="flex-1 py-2.5 px-4 rounded-xl border border-slate-300 text-slate-700 font-bold text-xs hover:bg-slate-50 min-h-[44px]"
+                className="flex-1 py-2.5 px-4 rounded-full border border-[#0a1217]/20 text-[#0a1217] font-medium text-xs hover:bg-[#e4eff7] min-h-[44px] cursor-pointer"
               >
                 Keep Checked In
               </button>
@@ -1156,12 +1144,12 @@ export const VenueCheckIn: React.FC<VenueCheckInProps> = ({
                 type="button"
                 onClick={handleConfirmUndo}
                 disabled={isLoading}
-                className="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-sm transition-all min-h-[44px] flex items-center justify-center gap-1.5"
+                className="flex-1 py-2.5 px-4 rounded-full bg-[#0a1217] hover:opacity-90 text-white font-medium text-xs transition-all min-h-[44px] flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {isLoading ? (
                   <Loader2 className="w-3.5 h-3.5 animate-spin" />
                 ) : (
-                  <RotateCcw className="w-3.5 h-3.5" />
+                  <RotateCcw className="w-3.5 h-3.5 text-[#cdfe00]" />
                 )}
                 <span>Yes, Undo</span>
               </button>

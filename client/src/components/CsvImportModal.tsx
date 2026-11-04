@@ -64,7 +64,7 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'wedding_guest_template.csv');
+    link.setAttribute('download', 'nyota_guest_template.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -152,31 +152,31 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
     >
       <div className="space-y-5">
         {/* Sample Template Download Bar */}
-        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs text-slate-600">
+        <div className="flex items-center justify-between p-4 rounded-[24px] bg-[#e4eff7] border border-[#e4eff7] text-xs text-[#0a1217]">
           <div className="flex items-center gap-2">
-            <FileSpreadsheet className="w-4 h-4 text-emerald-600" />
-            <span>Need the standard CSV layout?</span>
+            <FileSpreadsheet className="w-4 h-4 text-[#0a1217]" />
+            <span className="font-medium">Need the standard CSV layout?</span>
           </div>
           <button
             type="button"
             onClick={handleDownloadSample}
-            className="font-semibold text-rose-600 hover:text-rose-700 flex items-center gap-1 transition-colors"
+            className="font-medium text-[#0a1217] hover:underline flex items-center gap-1 transition-colors"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Download Sample Template</span>
+            <span>Download Sample CSV</span>
           </button>
         </div>
 
         {errorMsg && (
-          <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-2.5 text-rose-800 text-xs">
-            <AlertCircle className="w-4 h-4 text-rose-600 flex-shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-[24px] bg-[#e4eff7] border border-[#000000] flex items-start gap-2.5 text-[#0a1217] text-xs">
+            <AlertCircle className="w-4 h-4 text-[#0a1217] flex-shrink-0 mt-0.5" />
             <span>{errorMsg}</span>
           </div>
         )}
 
         {successMsg && (
-          <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-start gap-2.5 text-emerald-800 text-xs">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
+          <div className="p-3.5 rounded-[24px] bg-[#0a1217] text-white flex items-start gap-2.5 text-xs">
+            <CheckCircle2 className="w-4 h-4 text-[#cdfe00] flex-shrink-0 mt-0.5" />
             <span>{successMsg}</span>
           </div>
         )}
@@ -194,15 +194,15 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
 
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-slate-300 hover:border-rose-400 hover:bg-rose-50/20 rounded-2xl p-8 text-center cursor-pointer transition-all"
+              className="border-2 border-dashed border-[#0a1217]/20 hover:border-[#0a1217] rounded-[24px] p-8 text-center cursor-pointer transition-all"
             >
-              <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 rounded-full bg-[#e4eff7] text-[#0a1217] flex items-center justify-center mx-auto mb-3">
                 <UploadCloud className="w-6 h-6" />
               </div>
-              <p className="text-sm font-semibold text-slate-800">
+              <p className="text-sm font-medium text-[#0a1217]">
                 {selectedFile ? selectedFile.name : 'Click to select or drag a CSV file here'}
               </p>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-[#85898b] mt-1">
                 {selectedFile
                   ? `${(selectedFile.size / 1024).toFixed(1)} KB • Click to choose a different file`
                   : 'Supports .csv up to 2MB (Columns: Household Name, Primary Contact, Phone, Expected Party Size)'}
@@ -215,7 +215,7 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
                   type="button"
                   onClick={handleAnalyze}
                   disabled={isAnalyzing}
-                  className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-2 disabled:opacity-60"
+                  className="px-6 py-2.5 rounded-full bg-[#0a1217] hover:bg-[#0a1217]/90 text-white text-xs font-medium transition-all flex items-center gap-2 disabled:opacity-50"
                 >
                   {isAnalyzing ? (
                     <>
@@ -236,52 +236,52 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
           <div className="space-y-4">
             {/* Stats Cards */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-100 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-700">Ready to Import</p>
-                <p className="text-lg font-extrabold text-emerald-900 mt-0.5">{previewData.toImportCount}</p>
+              <div className="p-3.5 rounded-[24px] bg-[#e4eff7] text-center border border-[#e4eff7]">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">Ready to Import</p>
+                <p className="text-xl font-medium text-[#0a1217] mt-0.5">{previewData.toImportCount}</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-amber-50 border border-amber-100 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-amber-700">Duplicates Skipped</p>
-                <p className="text-lg font-extrabold text-amber-900 mt-0.5">{previewData.duplicateCount}</p>
+              <div className="p-3.5 rounded-[24px] bg-[#ffffff] border border-[#0a1217]/20 text-center">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">Duplicates Skipped</p>
+                <p className="text-xl font-medium text-[#0a1217] mt-0.5">{previewData.duplicateCount}</p>
               </div>
 
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-100 text-center">
-                <p className="text-[10px] font-bold uppercase tracking-wider text-rose-700">Invalid Rows</p>
-                <p className="text-lg font-extrabold text-rose-900 mt-0.5">{previewData.invalidCount}</p>
+              <div className="p-3.5 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
+                <p className="text-[10px] font-medium uppercase tracking-wider text-[#85898b]">Invalid Rows</p>
+                <p className="text-xl font-medium text-[#0a1217] mt-0.5">{previewData.invalidCount}</p>
               </div>
             </div>
 
             {/* Duplicates Alert Banner */}
             {previewData.duplicates.length > 0 && (
-              <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 text-xs text-amber-900">
-                <div className="flex items-center gap-1.5 font-bold mb-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-600" />
+              <div className="p-4 rounded-[24px] bg-[#e4eff7] border border-[#000000] text-xs text-[#0a1217]">
+                <div className="flex items-center gap-1.5 font-medium mb-2.5">
+                  <AlertTriangle className="w-4 h-4 text-[#0a1217]" />
                   <span>{previewData.duplicates.length} Duplicate Warning(s) Detected:</span>
                 </div>
                 <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
                   {previewData.duplicates.map((d, i) => (
                     <div
                       key={i}
-                      className="p-2.5 rounded-lg bg-white/90 border border-amber-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                      className="p-3 rounded-[24px] bg-white border border-[#0a1217]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
                     >
-                      <div className="text-[11px] text-amber-900 leading-tight">
-                        <span className="font-semibold text-slate-800">
+                      <div className="text-[11px] text-[#0a1217] leading-tight">
+                        <span className="font-medium text-[#0a1217]">
                           Row {d.rowNumber}: {d.name}
                         </span>{' '}
-                        <span className="text-slate-500">({d.phone})</span>
-                        <div className="text-[10px] text-amber-700 mt-0.5">{d.reason}</div>
+                        <span className="text-[#85898b]">({d.phone})</span>
+                        <div className="text-[10px] text-[#85898b] mt-0.5">{d.reason}</div>
                       </div>
 
                       {d.canOverride !== false && (
-                        <label className="flex items-center gap-1.5 cursor-pointer text-[11px] font-semibold text-amber-900 bg-amber-100/70 hover:bg-amber-100 px-2.5 py-1 rounded-md border border-amber-300 flex-shrink-0 transition-colors">
+                        <label className="flex items-center gap-1.5 cursor-pointer text-[11px] font-medium text-[#0a1217] bg-[#e4eff7] px-3 py-1 rounded-full border border-[#0a1217]/20 flex-shrink-0 transition-colors">
                           <input
                             type="checkbox"
                             checked={overriddenRows.has(d.rowNumber)}
                             onChange={() => toggleOverride(d.rowNumber)}
-                            className="w-3.5 h-3.5 rounded text-rose-600 focus:ring-rose-500 border-amber-300"
+                            className="w-3.5 h-3.5 rounded accent-[#0a1217]"
                           />
-                          <span>Import anyway (shared phone)</span>
+                          <span>Import anyway</span>
                         </label>
                       )}
                     </div>
@@ -292,26 +292,26 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
 
             {/* Preview Table */}
             <div>
-              <p className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+              <p className="text-xs font-medium text-[#0a1217] uppercase tracking-wider mb-2">
                 Preview of Valid Households ({previewData.previewRows.length})
               </p>
-              <div className="max-h-48 overflow-y-auto rounded-xl border border-slate-200">
+              <div className="max-h-48 overflow-y-auto rounded-[24px] border border-[#000000]">
                 <table className="w-full text-left border-collapse text-xs">
-                  <thead className="bg-slate-50 sticky top-0 border-b border-slate-200 text-[10px] uppercase font-bold text-slate-400">
+                  <thead className="bg-[#e4eff7] sticky top-0 border-b border-[#000000] text-[10px] uppercase font-medium text-[#0a1217]">
                     <tr>
-                      <th className="py-2 px-3">Household</th>
-                      <th className="py-2 px-3">Contact</th>
-                      <th className="py-2 px-3">Phone</th>
-                      <th className="py-2 px-3 text-center">Guests</th>
+                      <th className="py-2.5 px-3.5">Household</th>
+                      <th className="py-2.5 px-3.5">Contact</th>
+                      <th className="py-2.5 px-3.5">Phone</th>
+                      <th className="py-2.5 px-3.5 text-center">Guests</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-slate-100 text-slate-700">
+                  <tbody className="divide-y divide-[#0a1217]/10 text-[#0a1217]">
                     {previewData.previewRows.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50/50">
-                        <td className="py-2 px-3 font-semibold text-slate-900">{row.name}</td>
-                        <td className="py-2 px-3">{row.primaryContactName}</td>
-                        <td className="py-2 px-3 text-slate-500">{row.phone}</td>
-                        <td className="py-2 px-3 text-center font-bold text-slate-800">
+                      <tr key={idx} className="hover:bg-[#e4eff7]/40">
+                        <td className="py-2.5 px-3.5 font-medium text-[#0a1217]">{row.name}</td>
+                        <td className="py-2.5 px-3.5 text-[#85898b]">{row.primaryContactName}</td>
+                        <td className="py-2.5 px-3.5 text-[#85898b]">{row.phone}</td>
+                        <td className="py-2.5 px-3.5 text-center font-medium text-[#0a1217]">
                           {row.expectedPartySize}
                         </td>
                       </tr>
@@ -322,20 +322,20 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-4 border-t border-[#0a1217]/10">
               <button
                 type="button"
                 onClick={() => setPreviewData(null)}
-                className="text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+                className="text-xs font-medium text-[#85898b] hover:text-[#0a1217] transition-colors"
               >
                 Choose Another File
               </button>
 
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={handleClose}
-                  className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100"
+                  className="px-5 py-2.5 rounded-full text-xs font-medium text-[#0a1217] border border-[#0a1217]/20 hover:border-[#0a1217] transition-colors"
                 >
                   Cancel
                 </button>
@@ -343,7 +343,7 @@ export const CsvImportModal: React.FC<CsvImportModalProps> = ({
                   type="button"
                   onClick={handleCommit}
                   disabled={isCommitting || (previewData.toImportCount + overriddenRows.size) === 0}
-                  className="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-semibold shadow-sm transition-all flex items-center gap-2 disabled:opacity-50"
+                  className="px-6 py-2.5 rounded-full bg-[#0a1217] hover:bg-[#0a1217]/90 text-white text-xs font-medium transition-all flex items-center gap-2 disabled:opacity-50"
                 >
                   {isCommitting ? (
                     <>

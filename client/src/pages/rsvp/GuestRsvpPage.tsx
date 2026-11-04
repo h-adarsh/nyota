@@ -13,7 +13,6 @@ import {
   Clock,
   X,
   Check,
-  HeartHandshake,
 } from 'lucide-react';
 import { getInvitationByToken, submitRsvpApi } from '../../api/rsvp';
 import { PublicRsvpLookupResponse, RsvpSubmissionItem } from '../../types/rsvp';
@@ -144,12 +143,10 @@ export const GuestRsvpPage: React.FC = () => {
       const current = prev[functionId];
       if (!current) return prev;
 
-      // Adjust vegCount and nonvegCount to stay within new party size
       let newVeg = current.vegCount;
       let newNonveg = current.nonvegCount;
 
       if (newVeg + newNonveg !== clamped) {
-        // Default to all veg if mismatch
         newVeg = clamped;
         newNonveg = 0;
       }
@@ -213,7 +210,6 @@ export const GuestRsvpPage: React.FC = () => {
     const errors = getValidationErrors();
     if (errors.length > 0) {
       setSubmitError(errors[0]);
-      // Scroll to the top or the first error
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
@@ -250,13 +246,15 @@ export const GuestRsvpPage: React.FC = () => {
   // 1. Loading State
   if (loading) {
     return (
-      <div className="min-h-screen bg-rose-50/40 flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl shadow-rose-900/5 border border-rose-100 p-8 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-rose-100 text-rose-600 mb-4 animate-pulse">
-            <Loader2 className="w-8 h-8 animate-spin" />
+      <div className="min-h-screen bg-[#ffffff] flex flex-col items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md bg-[#e4eff7] rounded-[24px] border border-[#0a1217]/10 p-8 text-center space-y-4">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#0a1217] text-white mx-auto">
+            <Loader2 className="w-6 h-6 animate-spin" />
           </div>
-          <h2 className="text-xl font-bold text-slate-800 tracking-tight">Loading Invitation...</h2>
-          <p className="text-slate-500 text-sm mt-1">Preparing your wedding functions and RSVP details.</p>
+          <div>
+            <h2 className="text-xl font-medium text-[#0a1217] tracking-tight">Loading Invitation</h2>
+            <p className="text-[#85898b] text-sm mt-1">Retrieving wedding functions and RSVP details...</p>
+          </div>
         </div>
       </div>
     );
@@ -265,20 +263,23 @@ export const GuestRsvpPage: React.FC = () => {
   // 2. Error / Not Found State
   if (errorMsg || !invitationData) {
     return (
-      <div className="min-h-screen bg-rose-50/40 flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-lg bg-white rounded-3xl shadow-xl shadow-rose-900/5 border border-rose-100 p-8 sm:p-10 text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-amber-50 text-amber-600 mb-4 border border-amber-200">
-            <AlertCircle className="w-8 h-8" />
+      <div className="min-h-screen bg-[#ffffff] flex flex-col items-center justify-center px-4 py-12">
+        <div className="w-full max-w-lg bg-[#ffffff] rounded-[24px] border border-[#000000] p-8 sm:p-10 text-center space-y-6">
+          <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#e4eff7] text-[#0a1217] mx-auto border border-[#0a1217]/10">
+            <AlertCircle className="w-7 h-7" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 tracking-tight">Invitation Unavailable</h2>
-          <p className="text-slate-600 text-sm mt-3 leading-relaxed">
-            {errorMsg || 'We were unable to locate your invitation. The private link may have expired or been regenerated.'}
-          </p>
-          <div className="mt-6 p-4 rounded-2xl bg-slate-50 border border-slate-200 text-left text-xs text-slate-600 leading-relaxed">
-            <p className="font-semibold text-slate-800 mb-1">What can I do?</p>
-            <ul className="list-disc list-inside space-y-1">
-              <li>Make sure you opened the complete link shared via WhatsApp or message.</li>
-              <li>Contact the couple or wedding planner to request an updated invite link.</li>
+          <div>
+            <span className="text-[11px] uppercase tracking-[0.2em] text-[#85898b] font-medium">Link Notice</span>
+            <h2 className="text-2xl font-serif font-normal text-[#0a1217] mt-1">Invitation Unavailable</h2>
+            <p className="text-[#85898b] text-sm mt-3 leading-relaxed">
+              {errorMsg || 'We were unable to locate your invitation. The private link may have expired or been regenerated.'}
+            </p>
+          </div>
+          <div className="p-4 rounded-[24px] bg-[#e4eff7] border border-[#e4eff7] text-left text-xs text-[#0a1217] leading-relaxed">
+            <p className="font-medium text-[#0a1217] mb-1">What can you do?</p>
+            <ul className="list-disc list-inside space-y-1 text-[#85898b]">
+              <li>Make sure you opened the complete link shared via WhatsApp or SMS.</li>
+              <li>Contact the couple or wedding host to request an updated invite link.</li>
             </ul>
           </div>
         </div>
@@ -288,36 +289,38 @@ export const GuestRsvpPage: React.FC = () => {
 
   const { household, wedding, functions } = invitationData;
 
-  // 3. Confirmation View (after submission or when user reviews confirmation)
+  // 3. Confirmation View
   if (isSubmittedSuccess) {
     return (
-      <div className="min-h-screen bg-rose-50/40 py-8 px-4 sm:px-6">
-        <div className="max-w-lg mx-auto space-y-6">
-          {/* Success Banner */}
-          <div className="bg-white rounded-3xl shadow-xl shadow-rose-900/5 border border-emerald-100 p-6 sm:p-8 text-center relative overflow-hidden">
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-emerald-50 rounded-full blur-2xl pointer-events-none" />
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 mb-4 shadow-sm border border-emerald-200">
-              <CheckCircle2 className="w-8 h-8" />
+      <div className="min-h-screen bg-[#ffffff] py-10 sm:py-16 px-4 sm:px-6">
+        <div className="max-w-xl mx-auto space-y-8">
+          {/* Sana Dark Showcase Confirmation Card */}
+          <div className="bg-[#0a1217] text-white rounded-[24px] p-8 sm:p-10 space-y-4 relative overflow-hidden">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-[#cdfe00] text-[#0a1217] uppercase tracking-wider">
+              <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+              RSVP Recorded
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              RSVP Recorded!
-            </h1>
-            <p className="text-emerald-800 font-medium text-sm mt-1">
-              Thank you, {household.name}!
-            </p>
-            <p className="text-slate-600 text-xs sm:text-sm mt-2 leading-relaxed">
-              Your response for <span className="font-semibold text-slate-800">{wedding.coupleNames}&apos;s</span> wedding celebrations has been safely saved.
-            </p>
+            <div>
+              <h1 className="font-serif font-normal text-3xl sm:text-5xl text-white tracking-tight leading-[1.1]">
+                Thank you, {household.name}.
+              </h1>
+              <p className="text-[#85898b] text-sm sm:text-base mt-2">
+                Your response for <span className="text-white font-medium">{wedding.coupleNames}&apos;s</span> celebration has been confirmed.
+              </p>
+            </div>
           </div>
 
-          {/* Response Summary Cards */}
-          <div className="bg-white rounded-3xl shadow-xl shadow-rose-900/5 border border-rose-100 p-6 sm:p-8 space-y-4">
-            <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-rose-500" />
-              Summary of Your Responses
-            </h2>
+          {/* Response Summary Card */}
+          <div className="bg-[#e4eff7] rounded-[24px] border border-[#e4eff7] p-6 sm:p-8 space-y-6">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-medium text-[#0a1217] uppercase tracking-wider flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-[#0a1217]" />
+                Summary of Responses
+              </h2>
+              <span className="text-xs text-[#85898b]">{functions.length} {functions.length === 1 ? 'event' : 'events'}</span>
+            </div>
 
-            <div className="space-y-3 pt-2">
+            <div className="space-y-3">
               {functions.map((fn) => {
                 const resp = formResponses[fn.id];
                 const dateObj = new Date(fn.dateTime);
@@ -338,45 +341,45 @@ export const GuestRsvpPage: React.FC = () => {
                 return (
                   <div
                     key={fn.id}
-                    className="p-4 rounded-2xl border border-slate-100 bg-slate-50/70 space-y-2 text-xs sm:text-sm"
+                    className="p-5 rounded-[24px] bg-[#ffffff] border border-[#0a1217]/10 space-y-3"
                   >
-                    <div className="flex items-start justify-between gap-2">
+                    <div className="flex items-start justify-between gap-3">
                       <div>
-                        <h3 className="font-bold text-slate-900 text-sm sm:text-base">{fn.name}</h3>
-                        <p className="text-slate-500 text-xs mt-0.5">
+                        <h3 className="font-medium text-[#0a1217] text-base">{fn.name}</h3>
+                        <p className="text-[#85898b] text-xs mt-0.5">
                           {formattedDate} • {formattedTime}
                         </p>
                         {fn.venue && (
-                          <p className="text-slate-500 text-xs flex items-center gap-1 mt-0.5">
-                            <MapPin className="w-3 h-3 text-slate-400" />
+                          <p className="text-[#85898b] text-xs flex items-center gap-1 mt-1">
+                            <MapPin className="w-3 h-3 text-[#85898b]" />
                             {fn.venue}
                           </p>
                         )}
                       </div>
 
                       {resp?.status === 'yes' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
-                          <Check className="w-3 h-3" /> Attending ({resp.partySize})
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[#0a1217] text-white">
+                          Attending ({resp.partySize})
                         </span>
                       )}
                       {resp?.status === 'no' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-200 text-slate-700">
-                          <X className="w-3 h-3" /> Declined
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[#85898b]/20 text-[#0a1217]">
+                          Declined
                         </span>
                       )}
                       {resp?.status === 'maybe' && (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-800 border border-amber-200">
-                          <Clock className="w-3 h-3" /> Maybe ({resp.partySize || '0'})
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[#ffffff] border border-[#0a1217] text-[#0a1217]">
+                          Tentative ({resp.partySize || '0'})
                         </span>
                       )}
                     </div>
 
                     {resp?.status === 'yes' && (
-                      <div className="pt-2 border-t border-slate-200/60 flex flex-wrap gap-3 text-xs text-slate-600">
+                      <div className="pt-2 border-t border-[#0a1217]/10 flex flex-wrap gap-4 text-xs text-[#0a1217]">
                         <span>🌱 <strong>{resp.vegCount}</strong> Veg</span>
                         <span>🍗 <strong>{resp.nonvegCount}</strong> Non-Veg</span>
                         {resp.dietaryNotes && (
-                          <span className="w-full text-slate-500 italic">
+                          <span className="w-full text-[#85898b] italic">
                             Note: &ldquo;{resp.dietaryNotes}&rdquo;
                           </span>
                         )}
@@ -387,11 +390,11 @@ export const GuestRsvpPage: React.FC = () => {
               })}
             </div>
 
-            <div className="pt-4 border-t border-slate-100 flex flex-col gap-2">
+            <div className="pt-2">
               <button
                 type="button"
                 onClick={() => setIsSubmittedSuccess(false)}
-                className="w-full py-3.5 px-4 rounded-2xl bg-rose-50 text-rose-700 font-semibold text-sm hover:bg-rose-100 active:scale-[0.99] transition-all flex items-center justify-center gap-2 border border-rose-200 shadow-sm"
+                className="w-full min-h-[48px] py-3 px-6 rounded-full border border-[#0a1217] text-[#0a1217] bg-[#ffffff] hover:bg-[#0a1217] hover:text-white transition-all text-sm font-medium flex items-center justify-center gap-2"
               >
                 <Edit3 className="w-4 h-4" />
                 Edit or Change Responses
@@ -405,428 +408,417 @@ export const GuestRsvpPage: React.FC = () => {
 
   // 4. Main RSVP Form View
   return (
-    <div className="min-h-screen bg-rose-50/40 py-6 sm:py-10 px-4 sm:px-6">
-      <div className="max-w-lg mx-auto space-y-6">
-        {/* Wedding & Household Invitation Header */}
-        <header className="bg-white rounded-3xl shadow-xl shadow-rose-900/5 border border-rose-100 p-6 sm:p-8 text-center relative overflow-hidden">
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 mb-3 shadow-sm border border-rose-100">
-            <HeartHandshake className="w-7 h-7" />
+    <div className="min-h-screen bg-[#ffffff] py-8 sm:py-16 px-4 sm:px-6">
+      <div className="max-w-xl mx-auto space-y-8">
+        {/* Editorial Header */}
+        <header className="text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#e4eff7] text-[#0a1217] text-xs font-medium uppercase tracking-[0.15em]">
+            Nyota • Invitation
           </div>
 
-          <p className="text-xs font-bold uppercase tracking-widest text-rose-600">
-            Celebration Invitation
-          </p>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+          <h1 className="font-serif font-normal text-4xl sm:text-6xl text-[#0a1217] leading-[1.08] tracking-tight">
             {wedding.coupleNames}
           </h1>
+
           {wedding.title && (
-            <p className="text-slate-500 text-xs sm:text-sm mt-0.5">{wedding.title}</p>
+            <p className="text-[#85898b] text-base">{wedding.title}</p>
           )}
 
-          <div className="mt-4 pt-4 border-t border-rose-50 flex flex-col items-center">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-semibold">
-              <Users className="w-3.5 h-3.5 text-slate-500" />
-              Invited: {household.name}
+          {/* Household Card */}
+          <div className="mt-6 rounded-[24px] bg-[#e4eff7] p-5 sm:p-6 border border-[#e4eff7] flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-left">
+            <div>
+              <span className="text-[11px] uppercase tracking-wider text-[#85898b] font-medium block">Invited Household</span>
+              <span className="text-lg font-medium text-[#0a1217]">{household.name}</span>
             </div>
             {household.expectedPartySize > 0 && (
-              <p className="text-slate-500 text-xs mt-1">
-                Reserved for up to <span className="font-semibold text-slate-700">{household.expectedPartySize} guests</span>
-              </p>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#ffffff] border border-[#0a1217]/10 text-xs font-medium text-[#0a1217]">
+                <Users className="w-3.5 h-3.5 text-[#85898b]" />
+                Up to {household.expectedPartySize} guests
+              </span>
             )}
           </div>
 
-          {/* Return-to-edit banner */}
+          {/* Return-to-edit notice */}
           {hasExistingReplies && (
-            <div className="mt-4 p-3 rounded-2xl bg-rose-50/80 border border-rose-200 text-xs text-rose-900 flex items-center justify-center gap-2">
-              <Sparkles className="w-4 h-4 text-rose-600 flex-shrink-0" />
-              <span>You previously submitted an RSVP. You can update your answers below anytime.</span>
+            <div className="rounded-[24px] bg-[#0a1217] text-white p-4 text-xs flex items-center justify-center gap-2 text-center">
+              <span className="w-2 h-2 rounded-full bg-[#cdfe00] flex-shrink-0" />
+              <span>You previously submitted an RSVP. You can update your answers anytime below.</span>
             </div>
           )}
         </header>
 
         {/* Global Error Banner */}
         {submitError && (
-          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 text-xs sm:text-sm flex items-start gap-3 shadow-sm">
-            <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
+          <div className="p-4 rounded-[24px] bg-[#e4eff7] border border-[#000000] text-[#0a1217] text-xs sm:text-sm flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-[#0a1217] flex-shrink-0 mt-0.5" />
             <div>
-              <p className="font-bold">Please check your responses:</p>
-              <p className="mt-0.5">{submitError}</p>
+              <p className="font-medium">Please check your responses:</p>
+              <p className="mt-0.5 text-[#85898b]">{submitError}</p>
             </div>
           </div>
         )}
 
         {functions.length === 0 ? (
-          <div className="bg-white rounded-3xl shadow-xl shadow-rose-900/5 border border-rose-100 p-8 sm:p-10 text-center space-y-4">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-rose-50 text-rose-500 mb-1 border border-rose-100">
-              <Calendar className="w-7 h-7" />
+          <div className="bg-[#e4eff7] rounded-[24px] border border-[#e4eff7] p-8 sm:p-10 text-center space-y-4">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#0a1217] text-white mb-1">
+              <Calendar className="w-6 h-6" />
             </div>
-            <h2 className="text-xl font-bold text-slate-800 tracking-tight">No Events Assigned Yet</h2>
-            <p className="text-slate-600 text-sm leading-relaxed max-w-sm mx-auto">
-              Your household invitation is confirmed, but specific wedding events have not yet been assigned to your invite. Please check back soon or contact <span className="font-semibold text-slate-800">{wedding.coupleNames}</span> or the wedding planner.
+            <h2 className="text-xl font-medium text-[#0a1217] tracking-tight">No Events Assigned Yet</h2>
+            <p className="text-[#85898b] text-sm leading-relaxed max-w-sm mx-auto">
+              Your household invitation is confirmed, but specific events have not yet been assigned to your invite. Please check back soon or contact <span className="font-medium text-[#0a1217]">{wedding.coupleNames}</span>.
             </p>
           </div>
         ) : (
           /* Form Body */
           <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="space-y-4">
-            <div className="flex items-center justify-between px-1">
-              <h2 className="text-sm font-bold text-slate-800 uppercase tracking-wider">
-                Select Your Attendance ({functions.length} {functions.length === 1 ? 'Event' : 'Events'})
-              </h2>
-              <span className="text-xs text-slate-500">All events required</span>
-            </div>
+            <div className="space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <h2 className="text-xs font-medium text-[#85898b] uppercase tracking-wider">
+                  Functions ({functions.length})
+                </h2>
+                <span className="text-xs text-[#85898b]">Required for each event</span>
+              </div>
 
-            {functions.map((fn, idx) => {
-              const resp = formResponses[fn.id] || {
-                functionId: fn.id,
-                status: '',
-                partySize: 1,
-                vegCount: 1,
-                nonvegCount: 0,
-                dietaryNotes: '',
-                touched: false,
-              };
+              {functions.map((fn, idx) => {
+                const resp = formResponses[fn.id] || {
+                  functionId: fn.id,
+                  status: '',
+                  partySize: 1,
+                  vegCount: 1,
+                  nonvegCount: 0,
+                  dietaryNotes: '',
+                  touched: false,
+                };
 
-              const dateObj = new Date(fn.dateTime);
-              const timeZone = invitationData?.wedding.timezone || 'Asia/Kolkata';
-              const formattedDate = dateObj.toLocaleDateString('en-IN', {
-                timeZone,
-                weekday: 'long',
-                month: 'short',
-                day: 'numeric',
-                year: 'numeric',
-              });
-              const formattedTime = dateObj.toLocaleTimeString('en-IN', {
-                timeZone,
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true,
-              });
+                const dateObj = new Date(fn.dateTime);
+                const timeZone = invitationData?.wedding.timezone || 'Asia/Kolkata';
+                const formattedDate = dateObj.toLocaleDateString('en-IN', {
+                  timeZone,
+                  weekday: 'long',
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                });
+                const formattedTime = dateObj.toLocaleTimeString('en-IN', {
+                  timeZone,
+                  hour: 'numeric',
+                  minute: '2-digit',
+                  hour12: true,
+                });
 
-              const isMealMatch =
-                resp.status === 'yes'
-                  ? resp.vegCount + resp.nonvegCount === resp.partySize
-                  : true;
+                const isMealMatch =
+                  resp.status === 'yes'
+                    ? resp.vegCount + resp.nonvegCount === resp.partySize
+                    : true;
 
-              return (
-                <div
-                  key={fn.id}
-                  className={`bg-white rounded-3xl shadow-xl shadow-rose-900/5 border transition-all p-5 sm:p-6 space-y-5 ${
-                    resp.status === 'yes'
-                      ? 'border-emerald-200'
-                      : resp.status === 'no'
-                      ? 'border-slate-200'
-                      : resp.status === 'maybe'
-                      ? 'border-amber-200'
-                      : 'border-rose-100'
-                  }`}
-                >
-                  {/* Event Details */}
-                  <div className="flex items-start justify-between gap-3">
+                return (
+                  <div
+                    key={fn.id}
+                    className={`rounded-[24px] bg-[#ffffff] border transition-all p-6 sm:p-8 space-y-6 ${
+                      resp.status
+                        ? 'border-[#0a1217]'
+                        : 'border-[#0a1217]/20'
+                    }`}
+                  >
+                    {/* Event Details */}
                     <div>
-                      <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-600 mb-1">
-                        <span className="w-5 h-5 rounded-full bg-rose-50 text-rose-600 inline-flex items-center justify-center text-[11px] font-bold">
-                          {idx + 1}
-                        </span>
-                        <span>Function</span>
+                      <div className="text-[11px] font-medium uppercase tracking-[0.15em] text-[#85898b] mb-1">
+                        Event {idx + 1}
                       </div>
-                      <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
+                      <h3 className="text-xl sm:text-2xl font-medium text-[#0a1217] tracking-tight">
                         {fn.name}
                       </h3>
-                      <div className="mt-1 space-y-0.5 text-xs text-slate-500">
+                      <div className="mt-2 space-y-1 text-xs text-[#85898b]">
                         <p className="flex items-center gap-1.5">
-                          <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                          <Calendar className="w-3.5 h-3.5 text-[#0a1217]" />
                           <span>{formattedDate} at {formattedTime}</span>
                         </p>
                         {fn.venue && (
                           <p className="flex items-center gap-1.5">
-                            <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                            <MapPin className="w-3.5 h-3.5 text-[#0a1217]" />
                             <span>{fn.venue}</span>
                           </p>
                         )}
                       </div>
                     </div>
-                  </div>
 
-                  {/* Attendance Selector (Yes / No / Maybe) */}
-                  <div className="space-y-1.5">
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                      Will you attend? <span className="text-rose-500">*</span>
-                    </label>
+                    {/* Attendance Selector (Yes / No / Maybe) - Full Pills */}
+                    <div className="space-y-2">
+                      <label className="block text-xs font-medium text-[#0a1217] uppercase tracking-wider">
+                        Will you attend?
+                      </label>
 
-                    <div className="grid grid-cols-3 gap-2">
-                      {/* Yes Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleUpdate(fn.id, { status: 'yes' })}
-                        className={`min-h-[48px] py-2.5 px-2 rounded-2xl border text-xs sm:text-sm font-semibold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all ${
-                          resp.status === 'yes'
-                            ? 'bg-emerald-600 text-white border-emerald-600 shadow-md shadow-emerald-600/20'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
-                        }`}
-                      >
-                        <Check className="w-4 h-4 flex-shrink-0" />
-                        <span>Attending</span>
-                      </button>
+                      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+                        {/* Yes Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleUpdate(fn.id, { status: 'yes' })}
+                          className={`min-h-[48px] py-2.5 px-3 rounded-full border text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all ${
+                            resp.status === 'yes'
+                              ? 'bg-[#0a1217] text-white border-[#0a1217]'
+                              : 'bg-[#ffffff] text-[#0a1217] border-[#0a1217]/25 hover:border-[#0a1217]'
+                          }`}
+                        >
+                          <Check className="w-4 h-4 flex-shrink-0" />
+                          <span>Attending</span>
+                        </button>
 
-                      {/* No Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleUpdate(fn.id, { status: 'no' })}
-                        className={`min-h-[48px] py-2.5 px-2 rounded-2xl border text-xs sm:text-sm font-semibold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all ${
-                          resp.status === 'no'
-                            ? 'bg-slate-800 text-white border-slate-800 shadow-md shadow-slate-900/20'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
-                        }`}
-                      >
-                        <X className="w-4 h-4 flex-shrink-0" />
-                        <span>Decline</span>
-                      </button>
+                        {/* No Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleUpdate(fn.id, { status: 'no' })}
+                          className={`min-h-[48px] py-2.5 px-3 rounded-full border text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all ${
+                            resp.status === 'no'
+                              ? 'bg-[#85898b] text-white border-[#85898b]'
+                              : 'bg-[#ffffff] text-[#0a1217] border-[#0a1217]/25 hover:border-[#0a1217]'
+                          }`}
+                        >
+                          <X className="w-4 h-4 flex-shrink-0" />
+                          <span>Decline</span>
+                        </button>
 
-                      {/* Maybe Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleUpdate(fn.id, { status: 'maybe' })}
-                        className={`min-h-[48px] py-2.5 px-2 rounded-2xl border text-xs sm:text-sm font-semibold flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 transition-all ${
-                          resp.status === 'maybe'
-                            ? 'bg-amber-500 text-white border-amber-500 shadow-md shadow-amber-500/20'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
-                        }`}
-                      >
-                        <Clock className="w-4 h-4 flex-shrink-0" />
-                        <span>Tentative</span>
-                      </button>
+                        {/* Maybe Button */}
+                        <button
+                          type="button"
+                          onClick={() => handleUpdate(fn.id, { status: 'maybe' })}
+                          className={`min-h-[48px] py-2.5 px-3 rounded-full border text-xs sm:text-sm font-medium flex items-center justify-center gap-1.5 transition-all ${
+                            resp.status === 'maybe'
+                              ? 'bg-[#e4eff7] text-[#0a1217] border-[#0a1217]'
+                              : 'bg-[#ffffff] text-[#0a1217] border-[#0a1217]/25 hover:border-[#0a1217]'
+                          }`}
+                        >
+                          <Clock className="w-4 h-4 flex-shrink-0" />
+                          <span>Tentative</span>
+                        </button>
+                      </div>
+
+                      {resp.touched && !resp.status && (
+                        <p className="text-xs text-[#0a1217] font-medium mt-1">
+                          Please select one option above.
+                        </p>
+                      )}
                     </div>
 
-                    {resp.touched && !resp.status && (
-                      <p className="text-xs text-rose-600 font-medium mt-1">
-                        Please choose one of the options above.
-                      </p>
-                    )}
-                  </div>
+                    {/* Attending Details Section (Shown when status is 'yes') */}
+                    {resp.status === 'yes' && (
+                      <div className="pt-4 border-t border-[#0a1217]/10 space-y-5">
+                        {/* Party Size Stepper */}
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <label className="text-xs font-medium text-[#0a1217] uppercase tracking-wider flex items-center gap-1.5">
+                              <Users className="w-3.5 h-3.5 text-[#0a1217]" />
+                              Attending Headcount
+                            </label>
+                            <span className="text-xs text-[#85898b]">Max 50</span>
+                          </div>
 
-                  {/* Attending Details Section (Shown when status is 'yes') */}
-                  {resp.status === 'yes' && (
-                    <div className="pt-4 border-t border-slate-100 space-y-4 animate-in fade-in duration-200">
-                      {/* Party Size Stepper */}
-                      <div>
-                        <div className="flex items-center justify-between mb-1.5">
-                          <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <Users className="w-3.5 h-3.5 text-slate-500" />
-                            Attending Party Size
-                          </label>
-                          <span className="text-xs text-slate-500">
-                            (max 50)
-                          </span>
+                          <div className="flex items-center gap-3">
+                            <button
+                              type="button"
+                              onClick={() => handlePartySizeChange(fn.id, resp.partySize - 1)}
+                              disabled={resp.partySize <= 1}
+                              className="w-11 h-11 rounded-full bg-[#e4eff7] hover:bg-[#0a1217] hover:text-white active:scale-95 text-[#0a1217] font-medium text-lg disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center border border-[#0a1217]/10"
+                              aria-label="Decrease party size"
+                            >
+                              -
+                            </button>
+                            <input
+                              type="number"
+                              min="1"
+                              max="50"
+                              inputMode="numeric"
+                              value={resp.partySize}
+                              onChange={(e) =>
+                                handlePartySizeChange(fn.id, parseInt(e.target.value, 10) || 1)
+                              }
+                              className="flex-1 h-11 text-center font-medium text-lg rounded-[24px] border border-[#000000] bg-white text-[#0a1217] focus:outline-none transition-all"
+                              aria-label="Party size number"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => handlePartySizeChange(fn.id, resp.partySize + 1)}
+                              disabled={resp.partySize >= 50}
+                              className="w-11 h-11 rounded-full bg-[#e4eff7] hover:bg-[#0a1217] hover:text-white active:scale-95 text-[#0a1217] font-medium text-lg disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center border border-[#0a1217]/10"
+                              aria-label="Increase party size"
+                            >
+                              +
+                            </button>
+                          </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
-                          <button
-                            type="button"
-                            onClick={() => handlePartySizeChange(fn.id, resp.partySize - 1)}
-                            disabled={resp.partySize <= 1}
-                            className="w-11 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center border border-slate-200"
-                            aria-label="Decrease party size"
-                          >
-                            -
-                          </button>
+                        {/* Dietary Preferences (Veg & Non-Veg) */}
+                        <div className="p-5 rounded-[24px] bg-[#e4eff7] space-y-3">
+                          <div className="flex items-center justify-between">
+                            <label className="text-xs font-medium text-[#0a1217] uppercase tracking-wider flex items-center gap-1.5">
+                              <Utensils className="w-3.5 h-3.5 text-[#0a1217]" />
+                              Meal Distribution
+                            </label>
+                            <span
+                              className={`text-xs font-medium px-2.5 py-0.5 rounded-full ${
+                                isMealMatch
+                                  ? 'bg-[#0a1217] text-white'
+                                  : 'bg-[#ffffff] text-[#0a1217] border border-[#0a1217]'
+                              }`}
+                            >
+                              {isMealMatch
+                                ? `✓ ${resp.partySize} / ${resp.partySize} accounted for`
+                                : `⚠️ Total: ${resp.vegCount + resp.nonvegCount} of ${resp.partySize}`}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-3">
+                            {/* Vegetarian Input */}
+                            <div className="p-3.5 rounded-[24px] bg-[#ffffff] border border-[#0a1217]/10">
+                              <label className="block text-xs font-medium text-[#0a1217] mb-1">
+                                🌱 Vegetarian
+                              </label>
+                              <input
+                                type="number"
+                                min="0"
+                                max={resp.partySize}
+                                inputMode="numeric"
+                                value={resp.vegCount}
+                                onChange={(e) => {
+                                  const v = Math.max(0, parseInt(e.target.value, 10) || 0);
+                                  handleUpdate(fn.id, { vegCount: v });
+                                }}
+                                className="w-full h-10 px-3 font-medium text-base rounded-[24px] border border-[#000000] bg-white text-[#0a1217] focus:outline-none transition-all text-center"
+                              />
+                            </div>
+
+                            {/* Non-Vegetarian Input */}
+                            <div className="p-3.5 rounded-[24px] bg-[#ffffff] border border-[#0a1217]/10">
+                              <label className="block text-xs font-medium text-[#0a1217] mb-1">
+                                🍗 Non-Vegetarian
+                              </label>
+                              <input
+                                type="number"
+                                min="0"
+                                max={resp.partySize}
+                                inputMode="numeric"
+                                value={resp.nonvegCount}
+                                onChange={(e) => {
+                                  const nv = Math.max(0, parseInt(e.target.value, 10) || 0);
+                                  handleUpdate(fn.id, { nonvegCount: nv });
+                                }}
+                                className="w-full h-10 px-3 font-medium text-base rounded-[24px] border border-[#000000] bg-white text-[#0a1217] focus:outline-none transition-all text-center"
+                              />
+                            </div>
+                          </div>
+
+                          {!isMealMatch && (
+                            <p className="text-xs text-[#0a1217] font-medium pt-1">
+                              {resp.vegCount + resp.nonvegCount < resp.partySize
+                                ? `Please assign ${resp.partySize - (resp.vegCount + resp.nonvegCount)} more meal(s) between Veg and Non-Veg.`
+                                : `Meal count (${resp.vegCount + resp.nonvegCount}) exceeds headcount (${resp.partySize}) by ${resp.vegCount + resp.nonvegCount - resp.partySize}.`}
+                            </p>
+                          )}
+                        </div>
+
+                        {/* Dietary Notes */}
+                        <div>
+                          <div className="flex items-center justify-between mb-1.5">
+                            <label className="text-xs font-medium text-[#0a1217] uppercase tracking-wider">
+                              Special Dietary Requests (Optional)
+                            </label>
+                            <span className="text-[11px] text-[#85898b]">
+                              {resp.dietaryNotes.length}/500
+                            </span>
+                          </div>
+                          <textarea
+                            rows={2}
+                            maxLength={500}
+                            value={resp.dietaryNotes}
+                            onChange={(e) =>
+                              handleUpdate(fn.id, { dietaryNotes: e.target.value })
+                            }
+                            placeholder="e.g. Jain food required, nut allergy, high chair for toddler..."
+                            className="w-full p-3.5 text-xs sm:text-sm rounded-[24px] border border-[#000000] bg-white text-[#0a1217] focus:outline-none transition-all resize-none placeholder:text-[#85898b]"
+                          />
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Tentative Details Section (Shown when status is 'maybe') */}
+                    {resp.status === 'maybe' && (
+                      <div className="pt-4 border-t border-[#0a1217]/10 space-y-3 text-xs text-[#0a1217]">
+                        <p className="leading-relaxed bg-[#e4eff7] p-4 rounded-[24px] text-[#0a1217]">
+                          We will hold tentative capacity for you. You can return to update this response closer to the event date.
+                        </p>
+
+                        <div>
+                          <label className="block text-xs font-medium text-[#0a1217] mb-1">
+                            Estimated attending guests (if known):
+                          </label>
                           <input
                             type="number"
-                            min="1"
+                            min="0"
                             max="50"
                             inputMode="numeric"
                             value={resp.partySize}
                             onChange={(e) =>
-                              handlePartySizeChange(fn.id, parseInt(e.target.value, 10) || 1)
+                              handleUpdate(fn.id, {
+                                partySize: Math.max(0, Math.min(50, parseInt(e.target.value, 10) || 0)),
+                                vegCount: 0,
+                                nonvegCount: 0,
+                              })
                             }
-                            className="flex-1 h-11 text-center font-bold text-lg rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all"
-                            aria-label="Party size number"
+                            className="w-28 h-10 text-center font-medium text-base rounded-[24px] border border-[#000000] bg-white text-[#0a1217] focus:outline-none transition-all"
                           />
-                          <button
-                            type="button"
-                            onClick={() => handlePartySizeChange(fn.id, resp.partySize + 1)}
-                            disabled={resp.partySize >= 50}
-                            className="w-11 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 font-bold text-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center border border-slate-200"
-                            aria-label="Increase party size"
-                          >
-                            +
-                          </button>
                         </div>
                       </div>
+                    )}
 
-                      {/* Dietary Preferences (Veg & Non-Veg) */}
-                      <div className="space-y-2">
-                        <div className="flex items-center justify-between">
-                          <label className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                            <Utensils className="w-3.5 h-3.5 text-slate-500" />
-                            Meal Preferences
-                          </label>
-                          <span
-                            className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
-                              isMealMatch
-                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                                : 'bg-rose-100 text-rose-800 border border-rose-200 animate-pulse'
-                            }`}
-                          >
-                            {isMealMatch
-                              ? `✓ ${resp.partySize} of ${resp.partySize} accounted for`
-                              : `⚠️ Total: ${resp.vegCount + resp.nonvegCount} / ${resp.partySize}`}
-                          </span>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-3">
-                          {/* Vegetarian Input */}
-                          <div className="p-3 rounded-2xl bg-emerald-50/60 border border-emerald-100">
-                            <label className="block text-xs font-semibold text-emerald-900 mb-1">
-                              🌱 Vegetarian
-                            </label>
-                            <input
-                              type="number"
-                              min="0"
-                              max={resp.partySize}
-                              inputMode="numeric"
-                              value={resp.vegCount}
-                              onChange={(e) => {
-                                const v = Math.max(0, parseInt(e.target.value, 10) || 0);
-                                handleUpdate(fn.id, { vegCount: v });
-                              }}
-                              className="w-full h-10 px-3 font-bold text-base rounded-xl border border-emerald-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all text-center"
-                            />
-                          </div>
-
-                          {/* Non-Vegetarian Input */}
-                          <div className="p-3 rounded-2xl bg-amber-50/60 border border-amber-100">
-                            <label className="block text-xs font-semibold text-amber-900 mb-1">
-                              🍗 Non-Vegetarian
-                            </label>
-                            <input
-                              type="number"
-                              min="0"
-                              max={resp.partySize}
-                              inputMode="numeric"
-                              value={resp.nonvegCount}
-                              onChange={(e) => {
-                                const nv = Math.max(0, parseInt(e.target.value, 10) || 0);
-                                handleUpdate(fn.id, { nonvegCount: nv });
-                              }}
-                              className="w-full h-10 px-3 font-bold text-base rounded-xl border border-amber-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all text-center"
-                            />
-                          </div>
-                        </div>
-
-                        {!isMealMatch && (
-                          <p className="text-xs text-rose-600 font-medium">
-                            {resp.vegCount + resp.nonvegCount < resp.partySize
-                              ? `Please allocate ${resp.partySize - (resp.vegCount + resp.nonvegCount)} more meal(s) between Veg and Non-Veg.`
-                              : `Meal count (${resp.vegCount + resp.nonvegCount}) exceeds attending guests (${resp.partySize}) by ${resp.vegCount + resp.nonvegCount - resp.partySize}.`}
-                          </p>
-                        )}
+                    {/* Declined Section (Shown when status is 'no') */}
+                    {resp.status === 'no' && (
+                      <div className="pt-3 border-t border-[#0a1217]/10 text-xs text-[#85898b] leading-relaxed">
+                        <p>We will miss you at this function!</p>
                       </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
 
-                      {/* Dietary Notes */}
-                      <div>
-                        <div className="flex items-center justify-between mb-1">
-                          <label className="text-xs font-semibold text-slate-700">
-                            Special Dietary Requests or Notes (Optional)
-                          </label>
-                          <span className="text-[11px] text-slate-400">
-                            {resp.dietaryNotes.length}/500
-                          </span>
-                        </div>
-                        <textarea
-                          rows={2}
-                          maxLength={500}
-                          value={resp.dietaryNotes}
-                          onChange={(e) =>
-                            handleUpdate(fn.id, { dietaryNotes: e.target.value })
-                          }
-                          placeholder="e.g. Jain food required, nut allergy, high chair for toddler..."
-                          className="w-full p-3 text-xs sm:text-sm rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-rose-500/20 focus:border-rose-500 transition-all resize-none"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Tentative Details Section (Shown when status is 'maybe') */}
-                  {resp.status === 'maybe' && (
-                    <div className="pt-4 border-t border-slate-100 space-y-3 animate-in fade-in duration-200 text-xs text-slate-600">
-                      <p className="leading-relaxed bg-amber-50/70 p-3 rounded-2xl border border-amber-100 text-amber-900">
-                        We will hold tentative capacity for you. You can update this response closer to the event date.
-                      </p>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-700 mb-1">
-                          Estimated attending guests (if known):
-                        </label>
-                        <input
-                          type="number"
-                          min="0"
-                          max="50"
-                          inputMode="numeric"
-                          value={resp.partySize}
-                          onChange={(e) =>
-                            handleUpdate(fn.id, {
-                              partySize: Math.max(0, Math.min(50, parseInt(e.target.value, 10) || 0)),
-                              vegCount: 0,
-                              nonvegCount: 0,
-                            })
-                          }
-                          className="w-24 h-10 text-center font-bold text-base rounded-xl border border-slate-200 bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 transition-all"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Declined Section (Shown when status is 'no') */}
-                  {resp.status === 'no' && (
-                    <div className="pt-3 border-t border-slate-100 text-xs text-slate-500 leading-relaxed">
-                      <p>We are sorry you won&apos;t be able to join us for this event!</p>
-                    </div>
-                  )}
+            {/* Submit Action Bar */}
+            <div className="pt-4 space-y-3">
+              {submitError && (
+                <div
+                  ref={submitErrorRef}
+                  role="alert"
+                  aria-live="assertive"
+                  className="p-4 rounded-[24px] bg-[#e4eff7] border border-[#000000] text-[#0a1217] text-xs sm:text-sm flex items-start gap-3"
+                >
+                  <AlertCircle className="w-5 h-5 text-[#0a1217] flex-shrink-0 mt-0.5" />
+                  <div>
+                    <p className="font-medium">Unable to submit RSVP:</p>
+                    <p className="mt-0.5 text-[#85898b]">{submitError}</p>
+                  </div>
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Submit Action Bar */}
-          <div className="pt-2 space-y-3">
-            {submitError && (
-              <div
-                ref={submitErrorRef}
-                role="alert"
-                aria-live="assertive"
-                className="p-4 rounded-2xl bg-rose-50 border border-rose-300 text-rose-900 text-xs sm:text-sm flex items-start gap-3 shadow-md animate-in fade-in"
-              >
-                <AlertCircle className="w-5 h-5 text-rose-600 flex-shrink-0 mt-0.5" />
-                <div>
-                  <p className="font-bold">Unable to submit RSVP:</p>
-                  <p className="mt-0.5">{submitError}</p>
-                </div>
-              </div>
-            )}
-
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="w-full min-h-[52px] py-4 px-6 rounded-2xl bg-rose-600 hover:bg-rose-700 active:scale-[0.99] text-white font-bold text-base shadow-xl shadow-rose-600/25 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Submitting RSVP...</span>
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span>{hasExistingReplies ? 'Update My RSVP' : 'Submit RSVP'}</span>
-                </>
               )}
-            </button>
-            <p className="text-center text-[11px] text-slate-400 mt-2">
-              You can return to this same link anytime to update your responses.
-            </p>
-          </div>
-        </form>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full min-h-[52px] py-4 px-8 rounded-full bg-[#0a1217] text-white hover:bg-[#0a1217]/90 active:scale-[0.99] font-medium text-base disabled:opacity-40 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    <span>Submitting RSVP...</span>
+                  </>
+                ) : (
+                  <>
+                    <CheckCircle2 className="w-5 h-5" />
+                    <span>{hasExistingReplies ? 'Update My RSVP' : 'Submit RSVP'}</span>
+                  </>
+                )}
+              </button>
+              <p className="text-center text-xs text-[#85898b] pt-1">
+                You can return to this link anytime before the function to modify your response.
+              </p>
+            </div>
+          </form>
         )}
       </div>
     </div>
