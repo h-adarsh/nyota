@@ -117,23 +117,7 @@ docker run -p 5001:5001 \
 
 ---
 
-## 📄 CV / Resume Entry
 
-*Designed as a portfolio project showcasing production-grade software engineering, security architecture, and distributed state handling.*
-
-### Option 1: Bullets for Full-Stack / Backend Roles
-> **Nyota — Multi-Event RSVP & Headcount Web Platform** | *TypeScript, Node.js, Express, React, MySQL 8, Drizzle ORM, Docker, Vitest*  
-> [GitHub: github.com/h-adarsh/nyota-multi-event-rsvp-and-headcount-web-platform](https://github.com/h-adarsh/nyota-multi-event-rsvp-and-headcount-web-platform)
-> - Architected a production-grade, multi-event RSVP platform for Indian family functions, handling capability-based guest invitations, dietary breakdowns, and mobile venue door check-in.
-> - Implemented defense-in-depth security: Argon2id auth, SHA-256 session token hashing at rest, multi-tenant SQL isolation (`WHERE planner_id = ?`), CSV formula injection sanitization, and 128-bit unguessable capability URLs.
-> - Solved concurrency race conditions in real-time venue check-in by enforcing MySQL row-level locks (`SELECT ... FOR UPDATE`) in atomic transactions with client-side UUID idempotency for network retries.
-> - Built deterministic IANA timezone handling (`Asia/Kolkata`) to preserve local wall-clock event times regardless of guest phone location (eliminating NRI timezone offset bugs).
-> - Authored comprehensive test coverage with 205 automated unit and integration tests across 25 suites under Vitest and Supertest; achieved clean 0-error strict TypeScript typechecking and sub-2s Vite production builds.
-
-### Option 2: Compact One-Liner / Resume Summary
-> **Nyota (Full-Stack Web App)**: Production-grade multi-event RSVP & catering headcount engine built with React 18, Node.js, Express, MySQL 8, and Drizzle ORM; features capability URLs, Argon2id security, row-level concurrency locking for venue check-in, and 205 automated tests.
-
----
 
 ## 📜 License
 MIT License. Created by [Adarsh Singh](https://github.com/h-adarsh).
